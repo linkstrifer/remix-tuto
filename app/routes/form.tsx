@@ -12,7 +12,7 @@ export default function MultiForm() {
             Select plan
           </li>
           <li>
-            <small>Step 3</small>
+            <small>Step 3 </small>
             Add-ons
           </li>
           <li>
