@@ -24,6 +24,11 @@ module.exports = {
   // Base config
   extends: ["eslint:recommended"],
 
+  rules: {
+    'react/button-has-type': ['error'],
+    'react/prop-types': ['error']
+  },
+
   overrides: [
     // React
     {
