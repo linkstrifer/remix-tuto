@@ -8,12 +8,23 @@ on:
     branches:
       - main
 
+env:
+  NODE_VERSION: 21.2.0
+
 jobs:
   run-typecheck:
     name: Run typecheck
     runs-on: ubuntu-latest
 
     steps:
+      - name: install nodejs
+        uses: actions/setup-node@v4.1.0
+        with:
+          node-version: ${{ NODE_VERSION }}
+
+      - name: checkout
+        uses: actions/checkout@v4.2.2
+
       - name: install dependencies
         run: npm i
 
@@ -24,6 +35,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: install nodejs
+        uses: actions/setup-node@v4.1.0
+        with:
+          node-version: ${{ NODE_VERSION }}
+
+      - name: checkout
+        uses: actions/checkout@v4.2.2
+
       - name: install dependencies
         run: npm i
 
