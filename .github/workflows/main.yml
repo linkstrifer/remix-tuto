@@ -1,0 +1,47 @@
+name: Lints
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-typecheck:
+    name: Run typecheck
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: install nodejs
+        uses: actions/setup-node@v4.1.0
+        with:
+          node-version: 21
+
+      - name: checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: install dependencies
+        run: npm i
+
+      - name: runs typecheck
+        run: npm run typecheck
+  run-linters:
+    name: Run linters
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: install nodejs
+        uses: actions/setup-node@v4.1.0
+        with:
+          node-version: 21
+
+      - name: checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: install dependencies
+        run: npm i
+
+      - name: runs lint
+        run: npm run lint
