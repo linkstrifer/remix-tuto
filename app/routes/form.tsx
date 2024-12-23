@@ -1,50 +1,60 @@
 export default function MultiForm() {
   return (
-    <section>
-      <aside>
-        <ol className="list-decimal">
-          <li>
-            <small>Step 1</small>
-            Your info
-          </li>
-          <li>
-            <small>Step 2</small>
-            Select plan
-          </li>
-          <li>
-            <small>Step 3 </small>
-            Add-ons
-          </li>
-          <li>
-            <small>Step 4</small>
-            Summary
-          </li>
-        </ol>
-      </aside>
+    <main className="bg-[#eef5ff] flex items-center justify-around content-center min-h-screen">
+      <section className="bg-[#ffffff] flex">
+        <aside className="bg-[#483eff] relative m-4 flex flex-col justify-between rounded-md">
+          <ol className="list-decimal">
+            <li className="list-item text-[#ffffff]">
+              <div className="flex flex-col">
+                <small  className="text-[#8380ff]">Step 1</small>
+                Your info
+              </div>
+            </li>
+            <li className="list-item text-[#ffffff]">
+              <div className="flex flex-col">
+                <small  className="text-[#8380ff]">Step 2</small>
+                Select plan
+              </div>
+            </li>
+            <li className="list-item text-[#ffffff]">
+              <div className="flex flex-col">
+                <small  className="text-[#8380ff]">Step 3 </small>
+                Add-ons
+              </div>
+            </li>
+            <li className="list-item text-[#ffffff]">
+              <div className="flex flex-col">
+                <small  className="text-[#8380ff]">Step 4</small>
+                Summary
+              </div>
+            </li>
+          </ol>
+          <img className="absolute bottom-0" src="/bg-sidebar-desktop.svg" alt="sidebarDesktop"/>
+        </aside>
 
-      <article>
-        <h1>Personal info</h1>
+        <article className="m-4">
+          <h1>Personal info</h1>
 
-        <p>Please provide your name, email address, and phone number</p>
-        <form>
-          <label>
-            <span>Name</span>
-            <input type="text" placeholder="Name" />
-          </label>
+          <p>Please provide your name, email address, and phone number</p>
+          <form className="flex flex-col gap-4">
+            <label className="flex flex-col">
+              <span className="text-[#0d284f]">Name</span>
+              <input className="border-[#e5e2ef] hover:bg-[#b2aad2] border-solid border-2 rounded-md" type="text" placeholder="Name" />
+            </label>
 
-          <label>
-            <span>Email</span>
-            <input type="email" placeholder="Email" />
-          </label>
+            <label className="flex flex-col">
+              <span className="text-[#0d284f]">Email</span>
+              <input className="border-[#e5e2ef] border-solid border-2 rounded-md" type="email" placeholder="Email" />
+            </label>
 
-          <label>
-            <span>Phone number</span>
-            <input type="text" placeholder="Phone number" />
-          </label>
-
-          <button type="submit">Next Step</button>
-        </form>
-      </article>
-    </section>
+            <label className="flex flex-col">
+              <span className="text-[#0d284f]">Phone number</span>
+              <input className="border-[#e5e2ef] border-solid border-2 rounded-md" type="text" placeholder="Phone number" />
+            </label>
+            <button className="bg-[#174a8b] self-end text-white rounded-md" type="submit">Next Step</button>
+          </form>
+        </article>
+      </section>
+    </main>
   )
 }
