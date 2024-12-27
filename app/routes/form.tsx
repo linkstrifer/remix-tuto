@@ -1,7 +1,7 @@
 export default function MultiForm() {
   return (
     <main className="bg-[#eef5ff] grid min-h-screen">
-      <section className="bg-[#ffffff] flex flex-col md:grid grid-cols-3 md:m-auto md:w-fit gap-4 p-4">
+      <section className="bg-[#ffffff] flex flex-col md:grid grid-cols-3 md:m-auto md:w-fit gap-4 p-4 rounded-3xl">
         <aside className="bg-[#483eff] overflow-hidden rounded-xl relative pb-36">
           <img
             src="/bg-sidebar-desktop.svg"
