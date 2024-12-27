@@ -1,8 +1,8 @@
 export default function MultiForm() {
   return (
     <main className="bg-[#eef5ff] flex justify-center min-h-screen items-center">
-      <section className="bg-[#ffffff] grid grid-cols-3 content-center items-center m-auto w-min justify-center">
-        <aside className="bg-[#483eff] m-4">
+      <section className="bg-[#ffffff] grid grid-cols-3 content-center items-center m-auto w-fit justify-center">
+        <aside className="bg-[#483eff] m-4 w-min">
           <ol className="list-decimal">
             <li className="text-[#ffffff]">
               <div>
@@ -32,7 +32,7 @@ export default function MultiForm() {
           <img src="/bg-sidebar-desktop.svg" alt="sidebarDesktop"/>
         </aside>
 
-        <article className="m-4 col-span-2">
+        <article className="m-4 col-span-2 w-min">
           <h1>Personal info</h1>
 
           <p>Please provide your name, email address, and phone number</p>
