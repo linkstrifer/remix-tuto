@@ -58,35 +58,35 @@ export default function MultiForm() {
             Please provide your name, email address, and phone number
           </p>
 
-          <form className="flex flex-col">
-            <label>
+          <form className="flex flex-col gap-4">
+            <label className="flex flex-col">
               <span>Name</span>
               <input
-                className="border-[#e5e2ef] hover:bg-[#b2aad2] border-solid border-2 rounded-md"
+                className="border-[#e5e2ef] focus:outline-violet-700 border-solid border-2 rounded-md py-1"
                 type="text"
                 placeholder="Name"
               />
             </label>
 
-            <label>
+            <label className="flex flex-col">
               <span>Email</span>
               <input
-                className="border-[#e5e2ef] border-solid border-2 rounded-md"
+                className="border-[#e5e2ef] focus:outline-violet-700 border-solid border-2 rounded-md py-1"
                 type="email"
                 placeholder="Email"
               />
             </label>
 
-            <label>
+            <label className="flex flex-col">
               <span>Phone number</span>
               <input
-                className="border-[#e5e2ef] border-solid border-2 rounded-md"
+                className="border-[#e5e2ef] focus:outline-violet-700 border-solid border-2 rounded-md py-1"
                 type="text"
                 placeholder="Phone number"
               />
             </label>
             <button
-              className="bg-[#174a8b] self-end text-white rounded-md"
+              className="bg-[#174a8b] self-end text-white rounded-md p-2"
               type="submit"
             >
               Next Step
