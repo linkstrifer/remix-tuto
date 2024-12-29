@@ -16,7 +16,7 @@ export default function MultiForm() {
               </div>
               <div className="flex flex-col w-max">
                 <small className="text-[#8380ff]">Step 1</small>
-                Your info
+                <span>Your info</span>
               </div>
             </li>
             <li className="flex items-center m-6 text-white">
@@ -25,7 +25,7 @@ export default function MultiForm() {
               </div>
               <div className="flex flex-col w-max">
                 <small className="text-[#8380ff]">Step 1</small>
-                Select plan
+                <span>Select plan</span>
               </div>
             </li>
             <li className="flex items-center m-6 text-white">
@@ -34,7 +34,7 @@ export default function MultiForm() {
               </div>
               <div className="flex flex-col w-max">
                 <small className="text-[#8380ff]">Step 1</small>
-                Add-ons
+                <span>Add-ons</span>
               </div>
             </li>
             <li className="flex items-center m-6 text-white">
@@ -43,7 +43,7 @@ export default function MultiForm() {
               </div>
               <div className="flex flex-col w-max">
                 <small className="text-[#8380ff]">Step 1</small>
-                Summary
+                <span>Summary</span>
               </div>
             </li>
           </ol>
