@@ -1,7 +1,40 @@
+import { ActionFunctionArgs } from '@remix-run/node';
+import { Form, useActionData } from '@remix-run/react';
+import classNames from 'classnames';
 import { ComponentProps, useReducer } from 'react';
 import { twMerge } from 'tailwind-merge';
 
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+
+  const data = Object.fromEntries(formData);
+
+  const errors: {
+    name?: string;
+    email?: string;
+    phone?: string;
+  } = {};
+
+  if (!data.name) {
+    errors['name'] = 'Name is required';
+  }
+
+  if (!data.email) {
+    errors['email'] = 'Email is required';
+  }
+
+  if (!data.phone) {
+    errors['phone'] = 'Phone is required';
+  }
+
+  return {
+    errors,
+  };
+}
+
 export default function MultiForm() {
+  const actionData = useActionData<typeof action>();
+
   const [{ name, email, phone }, dispatch] = useReducer(
     (
       state: {
@@ -20,10 +53,12 @@ export default function MultiForm() {
     }
   );
 
+  console.log({ actionData });
+
   return (
     <main className="bg-[#eef5ff] grid min-h-screen">
       <section className="bg-[#ffffff] flex flex-col md:grid grid-cols-3 md:m-auto md:w-fit gap-4 p-4 rounded-3xl">
-        <aside className="bg-[#483eff] overflow-hidden rounded-xl relative pb-36">
+        {/* <aside className="bg-[#483eff] overflow-hidden rounded-xl relative pb-36">
           <img
             src="/bg-sidebar-desktop.svg"
             alt="sidebarDesktop"
@@ -68,7 +103,7 @@ export default function MultiForm() {
               </div>
             </li>
           </ol>
-        </aside>
+        </aside> */}
 
         <article className="flex flex-col justify-center col-span-2 gap-7 text-[#0d284f]">
           <h1 className="text-3xl">
@@ -91,8 +126,9 @@ export default function MultiForm() {
             Please provide your name, email address, and phone number
           </p>
 
-          <form className="flex flex-col gap-4">
+          <Form className="flex flex-col gap-4" method="POST">
             <Input
+              error={actionData?.errors.name}
               onChange={(event) =>
                 dispatch({
                   name: event.target.value,
@@ -100,8 +136,8 @@ export default function MultiForm() {
               }
               placeholder="Name"
               label="Name"
-              required
               type="text"
+              name="name"
               value={name}
             />
 
@@ -113,8 +149,8 @@ export default function MultiForm() {
               }
               placeholder="Email"
               label="Email"
-              required
               type="email"
+              name="email"
               value={email}
             />
 
@@ -126,8 +162,8 @@ export default function MultiForm() {
               }
               placeholder="Phone number"
               label="Phone number"
-              required
               type="text"
+              name="phone"
               value={phone}
             />
 
@@ -137,7 +173,7 @@ export default function MultiForm() {
             >
               Next Step
             </button>
-          </form>
+          </Form>
         </article>
       </section>
     </main>
@@ -147,16 +183,25 @@ export default function MultiForm() {
 function Input({
   className,
   label,
+  error,
   ...props
-}: ComponentProps<'input'> & { label?: string }) {
+}: ComponentProps<'input'> & { label?: string; error?: string }) {
+  console.log({ error });
   return (
     <label className="flex flex-col group" aria-label="Name">
       <div className="flex justify-between">
         {label ? <span>{label}</span> : null}
 
-        {!props.value ? (
-          <span className="font-bold text-red-500 group-has-[:user-invalid]:block hidden">
-            This field is required
+        {!props.value || error ? (
+          <span
+            className={classNames(
+              'font-bold text-red-500 group-has-[:user-invalid]:block',
+              {
+                hidden: !error,
+              }
+            )}
+          >
+            {error ?? 'This field is required'}
           </span>
         ) : null}
       </div>
