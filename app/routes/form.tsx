@@ -1,4 +1,25 @@
+import { ComponentProps, useReducer } from 'react';
+import { twMerge } from 'tailwind-merge';
+
 export default function MultiForm() {
+  const [{ name, email, phone }, dispatch] = useReducer(
+    (
+      state: {
+        email: string;
+        name: string;
+        phone: string;
+      },
+      updates: Partial<typeof state>
+    ) => {
+      return { ...state, ...updates };
+    },
+    {
+      email: '',
+      name: '',
+      phone: '',
+    }
+  );
+
   return (
     <main className="bg-[#eef5ff] grid min-h-screen">
       <section className="bg-[#ffffff] flex flex-col md:grid grid-cols-3 md:m-auto md:w-fit gap-4 p-4 rounded-3xl">
@@ -54,37 +75,62 @@ export default function MultiForm() {
             <b>Personal info</b>
           </h1>
 
+          <pre>
+            {JSON.stringify(
+              {
+                name,
+                email,
+                phone,
+              },
+              null,
+              2
+            )}
+          </pre>
+
           <p className="text-[#bcbdc2]">
             Please provide your name, email address, and phone number
           </p>
 
           <form className="flex flex-col gap-4">
-            <label className="flex flex-col">
-              <span>Name</span>
-              <input
-                className="border-[#e5e2ef] focus:outline-violet-700 border-solid border-2 rounded-md py-1"
-                type="text"
-                placeholder="Name"
-              />
-            </label>
+            <Input
+              onChange={(event) =>
+                dispatch({
+                  name: event.target.value,
+                })
+              }
+              placeholder="Name"
+              label="Name"
+              required
+              type="text"
+              value={name}
+            />
 
-            <label className="flex flex-col">
-              <span>Email</span>
-              <input
-                className="border-[#e5e2ef] focus:outline-violet-700 border-solid border-2 rounded-md py-1"
-                type="email"
-                placeholder="Email"
-              />
-            </label>
+            <Input
+              onChange={(event) =>
+                dispatch({
+                  email: event.target.value,
+                })
+              }
+              placeholder="Email"
+              label="Email"
+              required
+              type="email"
+              value={email}
+            />
 
-            <label className="flex flex-col">
-              <span>Phone number</span>
-              <input
-                className="border-[#e5e2ef] focus:outline-violet-700 border-solid border-2 rounded-md py-1"
-                type="text"
-                placeholder="Phone number"
-              />
-            </label>
+            <Input
+              onChange={(event) =>
+                dispatch({
+                  phone: event.target.value,
+                })
+              }
+              placeholder="Phone number"
+              label="Phone number"
+              required
+              type="text"
+              value={phone}
+            />
+
             <button
               className="bg-[#174a8b] self-end text-white rounded-md p-2"
               type="submit"
@@ -95,5 +141,33 @@ export default function MultiForm() {
         </article>
       </section>
     </main>
+  );
+}
+
+function Input({
+  className,
+  label,
+  ...props
+}: ComponentProps<'input'> & { label?: string }) {
+  return (
+    <label className="flex flex-col group" aria-label="Name">
+      <div className="flex justify-between">
+        {label ? <span>{label}</span> : null}
+
+        {!props.value ? (
+          <span className="font-bold text-red-500 group-has-[:user-invalid]:block hidden">
+            This field is required
+          </span>
+        ) : null}
+      </div>
+
+      <input
+        className={twMerge(
+          'border-[#e5e2ef] focus:outline-violet-700 border-solid border-2 rounded-md py-1',
+          className
+        )}
+        {...props}
+      />
+    </label>
   );
 }
