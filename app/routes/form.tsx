@@ -4,9 +4,7 @@ import classNames from 'classnames';
 import { ComponentProps } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
-
+function validateUserInfo(formData: FormData) {
   const data = Object.fromEntries(formData);
 
   const errors: {
@@ -27,9 +25,17 @@ export async function action({ request }: ActionFunctionArgs) {
     errors['phone'] = 'Phone is required';
   }
 
-  return {
-    errors,
-  };
+  if (data.phone.toString().length < 10) {
+    errors['phone'] = 'Please enter a valid phone number';
+  }
+
+  return { errors };
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+
+  return validateUserInfo(formData);
 }
 
 export default function MultiForm() {
@@ -38,7 +44,7 @@ export default function MultiForm() {
   return (
     <main className="bg-[#eef5ff] grid min-h-screen">
       <section className="bg-[#ffffff] flex flex-col md:grid grid-cols-3 md:m-auto md:w-fit gap-4 p-4 rounded-3xl">
-        {/* <aside className="bg-[#483eff] overflow-hidden rounded-xl relative pb-36">
+        <aside className="bg-[#483eff] overflow-hidden rounded-xl relative pb-36">
           <img
             src="/bg-sidebar-desktop.svg"
             alt="sidebarDesktop"
@@ -83,7 +89,7 @@ export default function MultiForm() {
               </div>
             </li>
           </ol>
-        </aside> */}
+        </aside>
 
         <article className="flex flex-col justify-center col-span-2 gap-7 text-[#0d284f]">
           <h1 className="text-3xl">
