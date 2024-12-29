@@ -1,7 +1,7 @@
 import { ActionFunctionArgs } from '@remix-run/node';
 import { Form, useActionData } from '@remix-run/react';
 import classNames from 'classnames';
-import { ComponentProps, useReducer } from 'react';
+import { ComponentProps } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -34,26 +34,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function MultiForm() {
   const actionData = useActionData<typeof action>();
-
-  const [{ name, email, phone }, dispatch] = useReducer(
-    (
-      state: {
-        email: string;
-        name: string;
-        phone: string;
-      },
-      updates: Partial<typeof state>
-    ) => {
-      return { ...state, ...updates };
-    },
-    {
-      email: '',
-      name: '',
-      phone: '',
-    }
-  );
-
-  console.log({ actionData });
 
   return (
     <main className="bg-[#eef5ff] grid min-h-screen">
@@ -110,18 +90,6 @@ export default function MultiForm() {
             <b>Personal info</b>
           </h1>
 
-          <pre>
-            {JSON.stringify(
-              {
-                name,
-                email,
-                phone,
-              },
-              null,
-              2
-            )}
-          </pre>
-
           <p className="text-[#bcbdc2]">
             Please provide your name, email address, and phone number
           </p>
@@ -129,42 +97,26 @@ export default function MultiForm() {
           <Form className="flex flex-col gap-4" method="POST">
             <Input
               error={actionData?.errors.name}
-              onChange={(event) =>
-                dispatch({
-                  name: event.target.value,
-                })
-              }
               placeholder="Name"
               label="Name"
               type="text"
               name="name"
-              value={name}
             />
 
             <Input
-              onChange={(event) =>
-                dispatch({
-                  email: event.target.value,
-                })
-              }
+              error={actionData?.errors.email}
               placeholder="Email"
               label="Email"
               type="email"
               name="email"
-              value={email}
             />
 
             <Input
-              onChange={(event) =>
-                dispatch({
-                  phone: event.target.value,
-                })
-              }
+              error={actionData?.errors.phone}
               placeholder="Phone number"
               label="Phone number"
               type="text"
               name="phone"
-              value={phone}
             />
 
             <button
@@ -186,13 +138,12 @@ function Input({
   error,
   ...props
 }: ComponentProps<'input'> & { label?: string; error?: string }) {
-  console.log({ error });
   return (
     <label className="flex flex-col group" aria-label="Name">
       <div className="flex justify-between">
         {label ? <span>{label}</span> : null}
 
-        {!props.value || error ? (
+        {error ? (
           <span
             className={classNames(
               'font-bold text-red-500 group-has-[:user-invalid]:block',
