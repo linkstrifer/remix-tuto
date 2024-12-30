@@ -9,13 +9,9 @@ function validateUserInfo(formData: FormData | Record<string, string>) {
       ? { ...formData }
       : Object.fromEntries(formData);
 
-  const errors: {
-    name?: string;
-    email?: string;
-    phone?: string;
-  } = {};
+  const errors: Record<string, string> = {};
 
-  console.log({ data });
+  const validData = Object.getOwnPropertyNames(data);
 
   if ('name' in data && !data.name) {
     errors['name'] = 'Name is required';
@@ -33,7 +29,13 @@ function validateUserInfo(formData: FormData | Record<string, string>) {
     errors['phone'] = 'Please enter a valid phone number';
   }
 
-  return { errors };
+  return {
+    errors,
+    validData: validData.filter(
+      (inputName) => !Object.getOwnPropertyNames(errors).includes(inputName)
+    ),
+    formData: data,
+  };
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -47,7 +49,21 @@ type CurrentStep = 'userInfo' | 'plan' | 'addons' | 'summary';
 export default function MultiForm() {
   const loaderData = useLoaderData<typeof loader>();
 
-  const currentStep: CurrentStep = 'userInfo';
+  let currentStep: CurrentStep = 'userInfo';
+
+  if (
+    ['name', 'email', 'phone', 'plan'].every((fieldName) =>
+      loaderData.validData.includes(fieldName)
+    )
+  ) {
+    currentStep = 'addons';
+  } else if (
+    ['name', 'email', 'phone'].every((fieldName) =>
+      loaderData.validData.includes(fieldName)
+    )
+  ) {
+    currentStep = 'plan';
+  }
 
   return (
     <main className="bg-[#eef5ff] grid min-h-screen">
@@ -66,6 +82,7 @@ export default function MultiForm() {
 
             <Form className="flex flex-col gap-4" method="GET">
               <Input
+                defaultValue={loaderData?.formData?.name}
                 error={loaderData?.errors?.name}
                 placeholder="Name"
                 label="Name"
@@ -74,6 +91,7 @@ export default function MultiForm() {
               />
 
               <Input
+                defaultValue={loaderData?.formData?.email}
                 error={loaderData?.errors?.email}
                 placeholder="Email"
                 label="Email"
@@ -82,11 +100,54 @@ export default function MultiForm() {
               />
 
               <Input
+                defaultValue={loaderData?.formData?.phone}
                 error={loaderData?.errors?.phone}
                 placeholder="Phone number"
                 label="Phone number"
                 type="text"
                 name="phone"
+              />
+
+              <button
+                className="bg-[#174a8b] self-end text-white rounded-md p-2"
+                type="submit"
+              >
+                Next Step
+              </button>
+            </Form>
+          </article>
+        ) : null}
+
+        {currentStep === 'plan' ? (
+          <article>
+            <h1>Select Plan</h1>
+
+            <Form method="GET">
+              <input
+                type="hidden"
+                name="name"
+                value={loaderData?.formData?.name}
+              />
+
+              <input
+                type="hidden"
+                name="email"
+                value={loaderData?.formData?.email}
+              />
+
+              <input
+                type="hidden"
+                name="phone"
+                value={loaderData?.formData?.phone}
+              />
+
+              <Input
+                defaultValue={loaderData?.formData?.plan}
+                error={loaderData?.errors?.plan}
+                placeholder="Plan"
+                label="Plan"
+                type="text"
+                name="plan"
               />
 
               <button
