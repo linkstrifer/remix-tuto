@@ -1,8 +1,7 @@
 import { ActionFunctionArgs } from '@remix-run/node';
 import { Form, useActionData } from '@remix-run/react';
-import classNames from 'classnames';
-import { ComponentProps } from 'react';
-import { twMerge } from 'tailwind-merge';
+import Input from '~/components/input';
+import Steps from '~/components/steps';
 
 function validateUserInfo(formData: FormData) {
   const data = Object.fromEntries(formData);
@@ -38,58 +37,14 @@ export async function action({ request }: ActionFunctionArgs) {
   return validateUserInfo(formData);
 }
 
+
 export default function MultiForm() {
   const actionData = useActionData<typeof action>();
 
   return (
     <main className="bg-[#eef5ff] grid min-h-screen">
       <section className="bg-[#ffffff] flex flex-col md:grid grid-cols-3 md:m-auto md:w-fit gap-4 p-4 rounded-3xl">
-        <aside className="bg-[#483eff] overflow-hidden rounded-xl relative pb-36">
-          <img
-            src="/bg-sidebar-desktop.svg"
-            alt="sidebarDesktop"
-            className="absolute left-0 bottom-0 right-0"
-          />
-
-          <ol className="relative">
-            <li className="flex items-center m-6 text-white">
-              <div className="flex justify-center items-center content-center w-7 m-3 border-white border-solid border-2 rounded-2xl">
-                1
-              </div>
-              <div className="flex flex-col w-max">
-                <small className="text-[#8380ff]">Step 1</small>
-                <span>Your info</span>
-              </div>
-            </li>
-            <li className="flex items-center m-6 text-white">
-              <div className="flex justify-center items-center content-center w-7 m-3 border-white border-solid border-2 rounded-2xl text-white">
-                2
-              </div>
-              <div className="flex flex-col w-max">
-                <small className="text-[#8380ff]">Step 1</small>
-                <span>Select plan</span>
-              </div>
-            </li>
-            <li className="flex items-center m-6 text-white">
-              <div className="flex justify-center items-center content-center w-7 m-3 border-white border-solid border-2 rounded-2xl text-white">
-                3
-              </div>
-              <div className="flex flex-col w-max">
-                <small className="text-[#8380ff]">Step 1</small>
-                <span>Add-ons</span>
-              </div>
-            </li>
-            <li className="flex items-center m-6 text-white">
-              <div className="flex justify-center items-center content-center w-7 m-3 border-white border-solid border-2 rounded-2xl text-white">
-                4
-              </div>
-              <div className="flex flex-col w-max">
-                <small className="text-[#8380ff]">Step 1</small>
-                <span>Summary</span>
-              </div>
-            </li>
-          </ol>
-        </aside>
+        <Steps />
 
         <article className="flex flex-col justify-center col-span-2 gap-7 text-[#0d284f]">
           <h1 className="text-3xl">
@@ -138,38 +93,4 @@ export default function MultiForm() {
   );
 }
 
-function Input({
-  className,
-  label,
-  error,
-  ...props
-}: ComponentProps<'input'> & { label?: string; error?: string }) {
-  return (
-    <label className="flex flex-col group" aria-label="Name">
-      <div className="flex justify-between">
-        {label ? <span>{label}</span> : null}
 
-        {error ? (
-          <span
-            className={classNames(
-              'font-bold text-red-500 group-has-[:user-invalid]:block',
-              {
-                hidden: !error,
-              }
-            )}
-          >
-            {error ?? 'This field is required'}
-          </span>
-        ) : null}
-      </div>
-
-      <input
-        className={twMerge(
-          'border-[#e5e2ef] focus:outline-violet-700 border-solid border-2 rounded-md py-1',
-          className
-        )}
-        {...props}
-      />
-    </label>
-  );
-}
