@@ -36,6 +36,7 @@ function validateUserInfo(formData: FormData | Record<string, string>) {
       (inputName) => !Object.getOwnPropertyNames(errors).includes(inputName)
     ),
     formData: data,
+    boolean: true,
   };
 }
 
@@ -47,13 +48,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 type CurrentStep = 'userInfo' | 'plan' | 'addons' | 'summary';
 
-function UserInfo(loaderData: {
-  errors: Record<string, string>;
-  validData: string[];
-  formData: {
-      [k: string]: string;
-  };
-}) {
+function UserInfo() {
+  const loaderData = useLoaderData<typeof loader>();
+
   return (
     <article className="flex flex-col justify-center col-span-2 gap-7 text-[#0d284f]">
       <h1 className="text-3xl">
@@ -103,13 +100,9 @@ function UserInfo(loaderData: {
   );
 }
 
-function Plan(loaderData: {
-  errors: Record<string, string>;
-  validData: string[];
-  formData: {
-      [k: string]: string;
-  };
-}) {
+function Plan() {
+  const loaderData = useLoaderData<typeof loader>();
+
   return (
     <article className="flex flex-col justify-evenly col-span-2 gap-7 text-[#0d284f]">
       <h1 className="text-3xl">
@@ -121,23 +114,11 @@ function Plan(loaderData: {
       </p>
 
       <Form className="flex flex-col gap-4" method="GET">
-        <input
-          type="hidden"
-          name="name"
-          value={loaderData?.formData?.name}
-        />
+        <input type="hidden" name="name" value={loaderData?.formData?.name} />
 
-        <input
-          type="hidden"
-          name="email"
-          value={loaderData?.formData?.email}
-        />
+        <input type="hidden" name="email" value={loaderData?.formData?.email} />
 
-        <input
-          type="hidden"
-          name="phone"
-          value={loaderData?.formData?.phone}
-        />
+        <input type="hidden" name="phone" value={loaderData?.formData?.phone} />
 
         <div className="flex justify-around">
           <div className="flex flex-col items-start">
@@ -221,6 +202,15 @@ function Plan(loaderData: {
   );
 }
 
+const formSteps: {
+  [key in CurrentStep]: ReactNode;
+} = {
+  userInfo: <UserInfo />,
+  plan: <Plan />,
+  addons: <div />,
+  summary: <div />,
+} as const;
+
 export default function MultiForm() {
   const loaderData = useLoaderData<typeof loader>();
 
@@ -242,15 +232,6 @@ export default function MultiForm() {
     currentStep = 'plan';
   }
 
-  const formSteps: {
-    [key in CurrentStep]: ReactNode;
-  } = {
-    userInfo: <UserInfo loaderData={loaderData}/>,
-    plan: <Plan loaderData={loaderData} />,
-    addons: <div />,
-    summary: <div />,
-  } as const;
-
   console.log(period);
 
   return (
@@ -259,7 +240,6 @@ export default function MultiForm() {
         <Steps />
 
         {formSteps[currentStep]}
-
       </section>
     </main>
   );
