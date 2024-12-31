@@ -2,8 +2,10 @@ import Input from '~/components/input';
 import Steps from '~/components/steps';
 import { LoaderFunctionArgs } from '@remix-run/node';
 import { Form, useLoaderData } from '@remix-run/react';
+import { useState } from 'react';
 
 function validateUserInfo(formData: FormData | Record<string, string>) {
+
   const data =
     typeof formData === 'object'
       ? { ...formData }
@@ -49,6 +51,9 @@ type CurrentStep = 'userInfo' | 'plan' | 'addons' | 'summary';
 export default function MultiForm() {
   const loaderData = useLoaderData<typeof loader>();
 
+  const [period, setPeriod] = useState(null);
+
+
   let currentStep: CurrentStep = 'userInfo';
 
   if (
@@ -64,6 +69,9 @@ export default function MultiForm() {
   ) {
     currentStep = 'plan';
   }
+
+  console.log(period)
+
 
   return (
     <main className="bg-[#eef5ff] grid min-h-screen">
@@ -189,6 +197,17 @@ export default function MultiForm() {
                     <span>2 months free</span>
                   </div>
                 </div>
+              </div>
+              <div className="flex justify-center gap-4">
+                <span>monthly</span>
+                <label className="bg-[#0d284f] relative w-11 h-5 rounded-full" aria-label="check">
+                  <input className="sr-only peer" type="checkbox" value={ (e: React.SyntheticEvent<EventTarget>): void => console.log(e) } id="check" />
+                  <span
+                    className="w-2/5 h-4/5 bg-white rounded-full absolute left-0.5 top-0.5 peer-checked:left-6 transition-all duration-400"
+                  >
+                  </span>
+                </label>
+                <span>yearly</span>
               </div>
 
               <div className="flex justify-between">
