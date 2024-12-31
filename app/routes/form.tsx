@@ -48,7 +48,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 type CurrentStep = 'userInfo' | 'plan' | 'addons' | 'summary';
 
-function UserInfo() {
+type UserInfoProps = {
+  boolean?: boolean;
+};
+
+type PlanProps = {
+  boolean?: boolean;
+};
+
+function UserInfo(props: UserInfoProps) {
   const loaderData = useLoaderData<typeof loader>();
 
   return (
@@ -100,7 +108,7 @@ function UserInfo() {
   );
 }
 
-function Plan() {
+function Plan(props: PlanProps) {
   const loaderData = useLoaderData<typeof loader>();
 
   return (
@@ -203,12 +211,12 @@ function Plan() {
 }
 
 const formSteps: {
-  [key in CurrentStep]: ReactNode;
+  [key in CurrentStep]: (props: UserInfoProps | PlanProps) => ReactNode;
 } = {
-  userInfo: <UserInfo />,
-  plan: <Plan />,
-  addons: <div />,
-  summary: <div />,
+  userInfo: (props) => <UserInfo {...props} />,
+  plan: (props) => <Plan {...props} />,
+  addons: () => <div />,
+  summary: () => <div />,
 } as const;
 
 export default function MultiForm() {
@@ -239,7 +247,7 @@ export default function MultiForm() {
       <section className="bg-[#ffffff] flex flex-col md:grid grid-cols-3 md:m-auto md:w-fit gap-4 p-4 rounded-3xl">
         <Steps />
 
-        {formSteps[currentStep]}
+        {formSteps[currentStep]({ boolean: true })}
       </section>
     </main>
   );
