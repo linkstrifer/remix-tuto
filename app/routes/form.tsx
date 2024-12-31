@@ -54,6 +54,7 @@ type UserInfoProps = {
 
 type PlanProps = {
   boolean?: boolean;
+  number?: number;
 };
 
 function UserInfo(props: UserInfoProps) {
@@ -242,12 +243,14 @@ export default function MultiForm() {
 
   console.log(period);
 
+  const CurrentStep = formSteps[currentStep];
+
   return (
     <main className="bg-[#eef5ff] grid min-h-screen">
       <section className="bg-[#ffffff] flex flex-col md:grid grid-cols-3 md:m-auto md:w-fit gap-4 p-4 rounded-3xl">
         <Steps />
 
-        {formSteps[currentStep]({ boolean: true })}
+        <CurrentStep boolean={true} number={1} />
       </section>
     </main>
   );
