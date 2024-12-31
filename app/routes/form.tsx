@@ -94,7 +94,7 @@ export default function MultiForm() {
 
         {formSteps[currentStep]}
 
-        {currentStep === 'plan' ? (
+        {currentStep === 'userInfo' ? (
           <article className="flex flex-col justify-center col-span-2 gap-7 text-[#0d284f]">
             <h1 className="text-3xl">
               <b>Personal info</b>
