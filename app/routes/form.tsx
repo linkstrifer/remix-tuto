@@ -48,16 +48,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 type CurrentStep = 'userInfo' | 'plan' | 'addons' | 'summary';
 
-type UserInfoProps = {
-  boolean?: boolean;
-};
-
-type PlanProps = {
-  boolean?: boolean;
-  number?: number;
-};
-
-function UserInfo(props: UserInfoProps) {
+function UserInfo() {
   const loaderData = useLoaderData<typeof loader>();
 
   return (
@@ -109,7 +100,7 @@ function UserInfo(props: UserInfoProps) {
   );
 }
 
-function Plan(props: PlanProps) {
+function Plan() {
   const loaderData = useLoaderData<typeof loader>();
 
   return (
@@ -212,12 +203,12 @@ function Plan(props: PlanProps) {
 }
 
 const formSteps: {
-  [key in CurrentStep]: (props: UserInfoProps | PlanProps) => ReactNode;
+  [key in CurrentStep]: ReactNode;
 } = {
-  userInfo: (props) => <UserInfo {...props} />,
-  plan: (props) => <Plan {...props} />,
-  addons: () => <div />,
-  summary: () => <div />,
+  userInfo: <UserInfo />,
+  plan: <Plan />,
+  addons: <div />,
+  summary: <div />,
 } as const;
 
 export default function MultiForm() {
@@ -243,14 +234,12 @@ export default function MultiForm() {
 
   console.log(period);
 
-  const CurrentStep = formSteps[currentStep];
-
   return (
     <main className="bg-[#eef5ff] grid min-h-screen">
       <section className="bg-[#ffffff] flex flex-col md:grid grid-cols-3 md:m-auto md:w-fit gap-4 p-4 rounded-3xl">
         <Steps />
 
-        <CurrentStep boolean={true} number={1} />
+        {formSteps[currentStep]}
       </section>
     </main>
   );
