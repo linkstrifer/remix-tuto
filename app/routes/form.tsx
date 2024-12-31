@@ -119,10 +119,12 @@ export default function MultiForm() {
         ) : null}
 
         {currentStep === 'plan' ? (
-          <article>
-            <h1>Select Plan</h1>
+          <article className="flex flex-col justify-evenly col-span-2 gap-7 text-[#0d284f]">
+            <h1 className="text-3xl"><b>Select your Plan</b></h1>
 
-            <Form method="GET">
+            <p className="text-[#bcbdc2]">You have the option of monthly or yearly billing.</p>
+
+            <Form className="flex flex-col gap-4" method="GET">
               <input
                 type="hidden"
                 name="name"
@@ -141,21 +143,68 @@ export default function MultiForm() {
                 value={loaderData?.formData?.phone}
               />
 
-              <Input
-                defaultValue={loaderData?.formData?.plan}
-                error={loaderData?.errors?.plan}
-                placeholder="Plan"
-                label="Plan"
-                type="text"
-                name="plan"
-              />
+              <div className="flex justify-around">
+                <div className="flex flex-col items-start">
+                  <img src="/icon-arcade.svg" alt="arcadeIcon" />
+                  <Input
+                    defaultValue={loaderData?.formData?.plan}
+                    error={loaderData?.errors?.plan}
+                    placeholder="Plan"
+                    label="Arcade"
+                    type="radio"
+                    name="plan"
+                  />
+                  <div className="flex flex-col items-start">
+                    <small className="text-[#bcbdc2]">$90/yr</small>
+                    <span>2 months free</span>
+                  </div>
+                </div>
+                <div className="flex flex-col items-start">
+                  <img src="/icon-advanced.svg" alt="advancedIcon" />
+                  <Input
+                    defaultValue={loaderData?.formData?.plan}
+                    error={loaderData?.errors?.plan}
+                    placeholder="Plan"
+                    label="Advanced"
+                    type="radio"
+                    name="plan"
+                  />
+                  <div className="flex flex-col items-start">
+                    <small className="text-[#bcbdc2]">$120/yr</small>
+                    <span>2 months free</span>
+                  </div>
+                </div>
+                <div className="flex flex-col items-start">
+                  <img src="/icon-pro.svg" alt="proIcon" />
+                  <Input
+                    defaultValue={loaderData?.formData?.plan}
+                    error={loaderData?.errors?.plan}
+                    placeholder="Plan"
+                    label="Pro"
+                    type="radio"
+                    name="plan"
+                  />
+                  <div className="flex flex-col items-start">
+                    <small className="text-[#bcbdc2]">$150/yr</small>
+                    <span>2 months free</span>
+                  </div>
+                </div>
+              </div>
 
-              <button
-                className="bg-[#174a8b] self-end text-white rounded-md p-2"
-                type="submit"
-              >
-                Next Step
-              </button>
+              <div className="flex justify-between">
+                <button
+                  className="text-[#bcbdc2]"
+                  type="submit"
+                >
+                  Go back
+                </button>
+                <button
+                  className="bg-[#174a8b] self-end text-white rounded-md p-2"
+                  type="submit"
+                >
+                  Next Step
+                </button>
+              </div>
             </Form>
           </article>
         ) : null}
