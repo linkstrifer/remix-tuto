@@ -2,10 +2,9 @@ import Input from '~/components/input';
 import Steps from '~/components/steps';
 import { LoaderFunctionArgs } from '@remix-run/node';
 import { Form, useLoaderData } from '@remix-run/react';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 
 function validateUserInfo(formData: FormData | Record<string, string>) {
-
   const data =
     typeof formData === 'object'
       ? { ...formData }
@@ -48,11 +47,27 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 type CurrentStep = 'userInfo' | 'plan' | 'addons' | 'summary';
 
+function UserInfo() {
+  return <div />;
+}
+
+function Plan() {
+  return <div />;
+}
+
+const formSteps: {
+  [key in CurrentStep]: ReactNode;
+} = {
+  userInfo: <UserInfo />,
+  plan: <Plan />,
+  addons: <div />,
+  summary: <div />,
+} as const;
+
 export default function MultiForm() {
   const loaderData = useLoaderData<typeof loader>();
 
-  const [period, setPeriod] = useState(null);
-
+  const [period, setPeriod] = useState<'yearly' | 'monthly'>('yearly');
 
   let currentStep: CurrentStep = 'userInfo';
 
@@ -70,15 +85,16 @@ export default function MultiForm() {
     currentStep = 'plan';
   }
 
-  console.log(period)
-
+  console.log(period);
 
   return (
     <main className="bg-[#eef5ff] grid min-h-screen">
       <section className="bg-[#ffffff] flex flex-col md:grid grid-cols-3 md:m-auto md:w-fit gap-4 p-4 rounded-3xl">
         <Steps />
 
-        {currentStep === 'userInfo' ? (
+        {formSteps[currentStep]}
+
+        {currentStep === 'plan' ? (
           <article className="flex flex-col justify-center col-span-2 gap-7 text-[#0d284f]">
             <h1 className="text-3xl">
               <b>Personal info</b>
@@ -128,9 +144,13 @@ export default function MultiForm() {
 
         {currentStep === 'plan' ? (
           <article className="flex flex-col justify-evenly col-span-2 gap-7 text-[#0d284f]">
-            <h1 className="text-3xl"><b>Select your Plan</b></h1>
+            <h1 className="text-3xl">
+              <b>Select your Plan</b>
+            </h1>
 
-            <p className="text-[#bcbdc2]">You have the option of monthly or yearly billing.</p>
+            <p className="text-[#bcbdc2]">
+              You have the option of monthly or yearly billing.
+            </p>
 
             <Form className="flex flex-col gap-4" method="GET">
               <input
@@ -200,21 +220,25 @@ export default function MultiForm() {
               </div>
               <div className="flex justify-center gap-4">
                 <span>monthly</span>
-                <label className="bg-[#0d284f] relative w-11 h-5 rounded-full" aria-label="check">
-                  <input className="sr-only peer" type="checkbox" value={ (e: React.SyntheticEvent<EventTarget>): void => console.log(e) } id="check" />
-                  <span
-                    className="w-2/5 h-4/5 bg-white rounded-full absolute left-0.5 top-0.5 peer-checked:left-6 transition-all duration-400"
-                  >
-                  </span>
+                <label
+                  className="bg-[#0d284f] relative w-11 h-5 rounded-full"
+                  aria-label="Change to "
+                >
+                  <input
+                    className="sr-only peer"
+                    type="checkbox"
+                    name="addon"
+                    onChange={(event) => {
+                      console.log(event.target.checked);
+                    }}
+                  />
+                  <span className="w-2/5 h-4/5 bg-white rounded-full absolute left-0.5 top-0.5 peer-checked:left-6 transition-all duration-400"></span>
                 </label>
                 <span>yearly</span>
               </div>
 
               <div className="flex justify-between">
-                <button
-                  className="text-[#bcbdc2]"
-                  type="submit"
-                >
+                <button className="text-[#bcbdc2]" type="submit">
                   Go back
                 </button>
                 <button
