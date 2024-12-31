@@ -36,7 +36,6 @@ function validateUserInfo(formData: FormData | Record<string, string>) {
       (inputName) => !Object.getOwnPropertyNames(errors).includes(inputName)
     ),
     formData: data,
-    boolean: true,
   };
 }
 
