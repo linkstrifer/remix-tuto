@@ -1,6 +1,6 @@
 import Steps from '~/components/steps';
 import { LoaderFunctionArgs } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, useLoaderData, useSearchParams } from '@remix-run/react';
 import { ReactNode } from 'react';
 import Plan from '~/components/plan';
 import UserInfo from '~/components/userInfo';
@@ -47,7 +47,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return validateUserInfo(Object.fromEntries(search.entries()));
 }
 
-type CurrentStep = 'userInfo' | 'plan' | 'addons' | 'summary';
+export type CurrentStep = 'userInfo' | 'plan' | 'addons' | 'summary';
 
 function Addons() {
   const loaderData = useLoaderData<typeof loader>();
@@ -93,27 +93,32 @@ const formSteps: {
 
 export default function MultiForm() {
   const loaderData = useLoaderData<typeof loader>();
+  const [searchParams] = useSearchParams();
 
-  let currentStep: CurrentStep = 'userInfo';
+  const currentStepFromURL = searchParams.get('step') as CurrentStep | null;
+
+  let calculatedCurrentStep: CurrentStep = 'userInfo';
 
   if (
     ['name', 'email', 'phone', 'plan'].every((fieldName) =>
       loaderData.validData.includes(fieldName)
     )
   ) {
-    currentStep = 'addons';
+    calculatedCurrentStep = 'addons';
   } else if (
     ['name', 'email', 'phone'].every((fieldName) =>
       loaderData.validData.includes(fieldName)
     )
   ) {
-    currentStep = 'plan';
+    calculatedCurrentStep = 'plan';
   }
+
+  const currentStep = currentStepFromURL ?? calculatedCurrentStep;
 
   return (
     <main className="bg-[#eef5ff] grid min-h-screen">
       <section className="bg-[#ffffff] flex flex-col md:grid grid-cols-3 md:m-auto md:w-fit gap-4 p-4 rounded-3xl">
-        <Steps />
+        <Steps currentStep={currentStep} />
 
         {formSteps[currentStep]}
       </section>

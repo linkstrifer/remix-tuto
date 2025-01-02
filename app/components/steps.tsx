@@ -1,5 +1,28 @@
+import { Link, useSearchParams } from '@remix-run/react';
+import classNames from 'classnames';
+import { CurrentStep } from '~/routes/form';
 
-export default function Steps() {
+const steps = [
+  {
+    label: 'Your info',
+    searchParam: 'userInfo',
+  },
+  {
+    label: 'Select plan',
+    searchParam: 'plan',
+  },
+  {
+    label: 'Add-ons',
+    searchParam: 'addons',
+  },
+  {
+    label: 'Summary',
+    searchParam: 'summary',
+  },
+];
+
+export default function Steps({ currentStep }: { currentStep: CurrentStep }) {
+  const [searchhParams] = useSearchParams();
 
   return (
     <aside className="bg-[#483eff] overflow-hidden rounded-xl relative pb-36">
@@ -10,43 +33,40 @@ export default function Steps() {
       />
 
       <ol className="relative">
-        <li className="flex items-center m-6 text-white">
-          <div className="flex justify-center items-center content-center w-7 m-3 border-white border-solid border-2 rounded-2xl">
-            1
-          </div>
-          <div className="flex flex-col w-max">
-            <small className="text-[#8380ff]">Step 1</small>
-            <span>Your info</span>
-          </div>
-        </li>
-        <li className="flex items-center m-6 text-white">
-          <div className="flex justify-center items-center content-center w-7 m-3 border-white border-solid border-2 rounded-2xl text-white">
-            2
-          </div>
-          <div className="flex flex-col w-max">
-            <small className="text-[#8380ff]">Step 2</small>
-            <span>Select plan</span>
-          </div>
-        </li>
-        <li className="flex items-center m-6 text-white">
-          <div className="flex justify-center items-center content-center w-7 m-3 border-white border-solid border-2 rounded-2xl text-white">
-            3
-          </div>
-          <div className="flex flex-col w-max">
-            <small className="text-[#8380ff]">Step 3</small>
-            <span>Add-ons</span>
-          </div>
-        </li>
-        <li className="flex items-center m-6 text-white">
-          <div className="flex justify-center items-center content-center w-7 m-3 border-white border-solid border-2 rounded-2xl text-white">
-            4
-          </div>
-          <div className="flex flex-col w-max">
-            <small className="text-[#8380ff]">Step 4</small>
-            <span>Summary</span>
-          </div>
-        </li>
+        {steps.map((step, index) => {
+          const goToStepUrl = new URLSearchParams(searchhParams.toString());
+
+          goToStepUrl.set('step', step.searchParam);
+
+          return (
+            <li className="m-6 text-white" key={step.label}>
+              <Link
+                className="flex items-center"
+                to={{
+                  pathname: '/form',
+                  search: goToStepUrl.toString(),
+                }}
+              >
+                <div
+                  className={classNames(
+                    'flex justify-center items-center content-center w-7 m-3 border-white border-solid border-2 rounded-2xl',
+                    {
+                      'bg-white text-[#483eff]':
+                        currentStep === step.searchParam,
+                    }
+                  )}
+                >
+                  {index + 1}
+                </div>
+                <div className="flex flex-col w-max">
+                  <small className="text-[#8380ff]">Step {index + 1}</small>
+                  <span>{step.label}</span>
+                </div>
+              </Link>
+            </li>
+          );
+        })}
       </ol>
     </aside>
-  )
+  );
 }

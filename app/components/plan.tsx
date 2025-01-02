@@ -1,4 +1,4 @@
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, Link, useLoaderData, useSearchParams } from '@remix-run/react';
 import { useState } from 'react';
 import { loader } from '~/routes/form';
 
@@ -7,6 +7,8 @@ const plans = ['arcade', 'advanced', 'pro'];
 export default function Plan() {
   const loaderData = useLoaderData<typeof loader>();
   const [period, setPeriod] = useState<'yearly' | 'monthly'>('monthly');
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   return (
     <article className="flex flex-col col-span-2 gap-7 text-[#0d284f]">
@@ -80,7 +82,17 @@ export default function Plan() {
         </div>
 
         <div className="flex justify-between">
-          <button className="text-[#bcbdc2]" type="submit">
+          <button
+            className="text-[#bcbdc2]"
+            type="button"
+            onClick={() =>
+              setSearchParams((prev) => {
+                prev.set('step', 'userInfo');
+
+                return prev;
+              })
+            }
+          >
             Go back
           </button>
           <button
