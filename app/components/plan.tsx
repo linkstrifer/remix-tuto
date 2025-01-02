@@ -1,21 +1,20 @@
 import { Form, useLoaderData } from '@remix-run/react';
 import { useState } from 'react';
 import { loader } from '~/routes/form';
-import Input from './input';
+
+const plans = ['arcade', 'advanced', 'pro'];
 
 export default function Plan() {
   const loaderData = useLoaderData<typeof loader>();
   const [period, setPeriod] = useState<'yearly' | 'monthly'>('monthly');
 
-  const [plan, setPlan] = useState<'arcade' | 'advanced' | 'pro'>('arcade');
-
   return (
-    <article className="flex flex-col justify-evenly col-span-2 gap-7 text-[#0d284f]">
+    <article className="flex flex-col col-span-2 gap-7 text-[#0d284f]">
       <h1 className="text-3xl">
         <b>Select your Plan</b>
       </h1>
 
-      <p className="text-[#bcbdc2]">
+      <p className="text-fm-gray">
         You have the option of monthly or yearly billing.
       </p>
 
@@ -26,104 +25,39 @@ export default function Plan() {
 
         <input type="hidden" name="phone" value={loaderData?.formData?.phone} />
 
-        <div className="flex justify-around">
-          <label
-            className={
-              plan === 'arcade'
-                ? 'flex flex-col items-start border-[#0d284f] border-2 rounded-md p-2'
-                : 'flex flex-col items-start'
-            }
-          >
-            <img src="/icon-arcade.svg" alt="arcadeIcon" />
+        <div className="grid grid-cols-3 gap-4 justify-around">
+          {plans.map((plan) => (
+            <label
+              key={plan}
+              className="flex flex-col gap-6 items-start has-[:checked]:border-[#0d284f] border rounded-md p-2 relative border-fm-gray"
+            >
+              <img src={`/icon-${plan}.svg`} alt={plan} aria-hidden />
 
-            <input
-              className="hidden"
-              defaultValue={loaderData?.formData?.plan}
-              placeholder="Plan"
-              type="radio"
-              name="plan"
-              onChange={(event) => {
-                if (event.target.checked) {
-                  setPlan('arcade');
-                }
-              }}
-              checked={plan === 'arcade'}
-            />
+              <div>
+                <span className="capitalize">{plan}</span>
 
-            <div className="flex flex-col items-start">
-              {period === 'yearly' ? (
-                <>
-                  <small className="text-[#bcbdc2]">$120/yr</small>
-                  <span>2 months free</span>
-                </>
-              ) : (
-                <small className="text-[#bcbdc2]">$12/mo</small>
-              )}
-            </div>
-          </label>
+                <input
+                  className="opacity-0 absolute pointer-events-none"
+                  defaultValue={loaderData?.formData?.plan}
+                  placeholder="Plan"
+                  type="radio"
+                  defaultChecked
+                  name="plan"
+                />
 
-          <div
-            className={
-              plan === 'advanced'
-                ? 'flex flex-col items-start border-[#0d284f] border-2 rounded-md p-2'
-                : 'flex flex-col items-start'
-            }
-          >
-            <img src="/icon-advanced.svg" alt="advancedIcon" />
-            <Input
-              defaultValue={loaderData?.formData?.plan}
-              error={loaderData?.errors?.plan}
-              placeholder="Plan"
-              label="Advanced"
-              type="radio"
-              name="plan"
-              onChange={(event) => {
-                setPlan('advanced');
-              }}
-              checked={plan === 'advanced'}
-            />
-            <div className="flex flex-col items-start">
-              {period === 'yearly' ? (
-                <>
-                  <small className="text-[#bcbdc2]">$120/yr</small>
-                  <span>2 months free</span>
-                </>
-              ) : (
-                <small className="text-[#bcbdc2]">$12/mo</small>
-              )}
-            </div>
-          </div>
-          <div
-            className={
-              plan === 'pro'
-                ? 'flex flex-col items-start border-[#0d284f] border-2 rounded-md p-2'
-                : 'flex flex-col items-start'
-            }
-          >
-            <img src="/icon-pro.svg" alt="proIcon" />
-            <Input
-              defaultValue={loaderData?.formData?.plan}
-              error={loaderData?.errors?.plan}
-              placeholder="Plan"
-              label="Pro"
-              type="radio"
-              name="plan"
-              onChange={(event) => {
-                setPlan('pro');
-              }}
-              checked={plan === 'pro'}
-            />
-            <div className="flex flex-col items-start">
-              {period === 'yearly' ? (
-                <>
-                  <small className="text-[#bcbdc2]">$120/yr</small>
-                  <span>2 months free</span>
-                </>
-              ) : (
-                <small className="text-[#bcbdc2]">$12/mo</small>
-              )}
-            </div>
-          </div>
+                <div className="flex flex-col items-start">
+                  {period === 'yearly' ? (
+                    <>
+                      <small className="text-[#bcbdc2]">$120/yr</small>
+                      <span className="text-xs">2 months free</span>
+                    </>
+                  ) : (
+                    <small className="text-[#bcbdc2]">$12/mo</small>
+                  )}
+                </div>
+              </div>
+            </label>
+          ))}
         </div>
         <div className="flex justify-center gap-4 bg-[#f8f9fe] h-10 items-center">
           <span>monthly</span>
@@ -136,9 +70,7 @@ export default function Plan() {
               type="checkbox"
               name="addon"
               onChange={(event) => {
-                event.target.checked === true
-                  ? setPeriod('yearly')
-                  : setPeriod('monthly');
+                setPeriod(event.target.checked === true ? 'yearly' : 'monthly');
               }}
               value={period}
             />
