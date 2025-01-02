@@ -50,7 +50,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 type CurrentStep = 'userInfo' | 'plan' | 'addons' | 'summary';
 
 function Addons() {
-
   const loaderData = useLoaderData<typeof loader>();
 
   return (
@@ -58,7 +57,9 @@ function Addons() {
       <h1 className="text-3xl">
         <b>Pick add-ons</b>
       </h1>
-      <p className="text-[#bcbdc2]">Add-ons help enhance your gaming experience.</p>
+      <p className="text-[#bcbdc2]">
+        Add-ons help enhance your gaming experience.
+      </p>
       <Form className="flex flex-col gap-4" method="GET">
         <input type="hidden" name="name" value={loaderData?.formData?.name} />
         <input type="hidden" name="email" value={loaderData?.formData?.email} />
@@ -78,7 +79,7 @@ function Addons() {
         </div>
       </Form>
     </article>
-  )
+  );
 }
 
 const formSteps: {

@@ -1,17 +1,13 @@
-import { Form, useLoaderData } from "@remix-run/react";
-import { useState } from "react";
-import { loader } from "~/routes/form";
-import Input from "./input";
-
+import { Form, useLoaderData } from '@remix-run/react';
+import { useState } from 'react';
+import { loader } from '~/routes/form';
+import Input from './input';
 
 export default function Plan() {
-
   const loaderData = useLoaderData<typeof loader>();
-  const [period, setPeriod] = useState<'yearly' | 'monthly'>('yearly');
+  const [period, setPeriod] = useState<'yearly' | 'monthly'>('monthly');
 
-  const [arcade, setArcade] = useState<'arcade' | ''>('');
-  const [advanced, setAdvanced] = useState<'advanced' | ''>('');
-  const [pro, setPro] = useState<'pro' | ''>('');
+  const [plan, setPlan] = useState<'arcade' | 'advanced' | 'pro'>('arcade');
 
   return (
     <article className="flex flex-col justify-evenly col-span-2 gap-7 text-[#0d284f]">
@@ -31,47 +27,47 @@ export default function Plan() {
         <input type="hidden" name="phone" value={loaderData?.formData?.phone} />
 
         <div className="flex justify-around">
-          <div className={ arcade === 'arcade' ?
-            "flex flex-col items-start border-[#0d284f] border-2 rounded-md p-2"
-            :
-            "flex flex-col items-start" }
+          <label
+            className={
+              plan === 'arcade'
+                ? 'flex flex-col items-start border-[#0d284f] border-2 rounded-md p-2'
+                : 'flex flex-col items-start'
+            }
           >
             <img src="/icon-arcade.svg" alt="arcadeIcon" />
-            <Input
+
+            <input
+              className="hidden"
               defaultValue={loaderData?.formData?.plan}
-              error={loaderData?.errors?.plan}
               placeholder="Plan"
-              label="Arcade"
               type="radio"
               name="plan"
-              onChange={event => {
-                event.target.checked === true ?
-                  (
-                    setArcade('arcade'),
-                    setAdvanced(''),
-                    setPro('')
-                  ) : setArcade('')
-                console.log({"arcade":arcade, "advanced": advanced, "pro": pro})
+              onChange={(event) => {
+                if (event.target.checked) {
+                  setPlan('arcade');
+                }
               }}
-              value={arcade}
+              checked={plan === 'arcade'}
             />
+
             <div className="flex flex-col items-start">
-              {
-                period === "yearly" ? (
-                  <>
-                    <small className="text-[#bcbdc2]">$120/yr</small>
-                    <span>2 months free</span>
-                  </>
-                ) : (
-                  <small className="text-[#bcbdc2]">$12/mo</small>
-                )
-              }
+              {period === 'yearly' ? (
+                <>
+                  <small className="text-[#bcbdc2]">$120/yr</small>
+                  <span>2 months free</span>
+                </>
+              ) : (
+                <small className="text-[#bcbdc2]">$12/mo</small>
+              )}
             </div>
-          </div>
-          <div className={ advanced === 'advanced' ?
-            "flex flex-col items-start border-[#0d284f] border-2 rounded-md p-2"
-            :
-            "flex flex-col items-start" }
+          </label>
+
+          <div
+            className={
+              plan === 'advanced'
+                ? 'flex flex-col items-start border-[#0d284f] border-2 rounded-md p-2'
+                : 'flex flex-col items-start'
+            }
           >
             <img src="/icon-advanced.svg" alt="advancedIcon" />
             <Input
@@ -81,34 +77,28 @@ export default function Plan() {
               label="Advanced"
               type="radio"
               name="plan"
-              onChange={event => {
-                event.target.checked === true ?
-                  (
-                    setArcade(''),
-                    setAdvanced('advanced'),
-                    setPro('')
-                  ) : setAdvanced('')
-                console.log({"arcade":arcade, "advanced": advanced, "pro": pro})
+              onChange={(event) => {
+                setPlan('advanced');
               }}
-              value={advanced}
+              checked={plan === 'advanced'}
             />
             <div className="flex flex-col items-start">
-              {
-                period === "yearly" ? (
-                  <>
-                    <small className="text-[#bcbdc2]">$120/yr</small>
-                    <span>2 months free</span>
-                  </>
-                ) : (
-                  <small className="text-[#bcbdc2]">$12/mo</small>
-                )
-              }
+              {period === 'yearly' ? (
+                <>
+                  <small className="text-[#bcbdc2]">$120/yr</small>
+                  <span>2 months free</span>
+                </>
+              ) : (
+                <small className="text-[#bcbdc2]">$12/mo</small>
+              )}
             </div>
           </div>
-          <div className={ pro === 'pro' ?
-            "flex flex-col items-start border-[#0d284f] border-2 rounded-md p-2"
-            :
-            "flex flex-col items-start" }
+          <div
+            className={
+              plan === 'pro'
+                ? 'flex flex-col items-start border-[#0d284f] border-2 rounded-md p-2'
+                : 'flex flex-col items-start'
+            }
           >
             <img src="/icon-pro.svg" alt="proIcon" />
             <Input
@@ -118,28 +108,20 @@ export default function Plan() {
               label="Pro"
               type="radio"
               name="plan"
-              onChange={event => {
-                event.target.checked === true ?
-                  (
-                    setArcade(''),
-                    setAdvanced(''),
-                    setPro('pro')
-                  ) : setPro('')
-                console.log({"arcade":arcade, "advanced": advanced, "pro": pro})
+              onChange={(event) => {
+                setPlan('pro');
               }}
-              value={pro}
+              checked={plan === 'pro'}
             />
             <div className="flex flex-col items-start">
-              {
-                period === "yearly" ? (
-                  <>
-                    <small className="text-[#bcbdc2]">$120/yr</small>
-                    <span>2 months free</span>
-                  </>
-                ) : (
-                  <small className="text-[#bcbdc2]">$12/mo</small>
-                )
-              }
+              {period === 'yearly' ? (
+                <>
+                  <small className="text-[#bcbdc2]">$120/yr</small>
+                  <span>2 months free</span>
+                </>
+              ) : (
+                <small className="text-[#bcbdc2]">$12/mo</small>
+              )}
             </div>
           </div>
         </div>
@@ -154,7 +136,9 @@ export default function Plan() {
               type="checkbox"
               name="addon"
               onChange={(event) => {
-                event.target.checked === true ? setPeriod('yearly') : setPeriod('monthly');
+                event.target.checked === true
+                  ? setPeriod('yearly')
+                  : setPeriod('monthly');
               }}
               value={period}
             />
