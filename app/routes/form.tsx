@@ -75,7 +75,13 @@ function Addons() {
               type="checkbox"
               name="onlineService"
             />
+            <div>
+              <span>Online service</span>
+              <small>Access to multiplayer games</small>
+            </div>
           </div>
+          <small className="text-[#8380ff]">+$1/mo</small>
+          <small className="text-[#8380ff]">+$10/yr</small>
         </div>
       </Form>
     </article>
