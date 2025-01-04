@@ -1,14 +1,33 @@
-import { Form, Link, useLoaderData, useSearchParams } from '@remix-run/react';
+import { Form, useLoaderData, useSearchParams } from '@remix-run/react';
 import { useState } from 'react';
 import { loader } from '~/routes/form';
 
-const plans = ['arcade', 'advanced', 'pro'];
+const plans = [
+  {
+    plan: 'arcade',
+    price: {
+      monthly: '$9/mo',
+      yearly: '$90/yr'
+    }
+  },{
+    plan: 'advanced',
+    price: {
+      monthly: '$12/mo',
+      yearly: '$120/yr'
+    }
+  },{
+    plan: 'pro',
+    price: {
+      monthly: '$15/mo',
+      yearly: '$150/yr'
+    }
+  }];
 
 export default function Plan() {
   const loaderData = useLoaderData<typeof loader>();
   const [period, setPeriod] = useState<'yearly' | 'monthly'>('monthly');
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
 
   return (
     <article className="flex flex-col col-span-2 gap-7 text-[#0d284f]">
@@ -30,13 +49,17 @@ export default function Plan() {
         <div className="grid grid-cols-3 gap-4 justify-around">
           {plans.map((plan) => (
             <label
-              key={plan}
-              className="flex flex-col gap-6 items-start has-[:checked]:border-[#0d284f] border rounded-md p-2 relative border-fm-gray"
+              key={plan.plan}
+              className="flex flex-col gap-6 items-start has-[:checked]:border-[#0d284f] border rounded-md p-4 relative border-fm-gray"
             >
-              <img src={`/icon-${plan}.svg`} alt={plan} aria-hidden />
+              <img
+                src={`/icon-${plan.plan}.svg`}
+                alt={plan.plan}
+                aria-hidden
+              />
 
               <div>
-                <span className="capitalize">{plan}</span>
+                <span className="capitalize">{plan.plan}</span>
 
                 <input
                   className="opacity-0 absolute pointer-events-none"
@@ -48,14 +71,14 @@ export default function Plan() {
                 />
 
                 <div className="flex flex-col items-start">
+                  <small className="text-[#bcbdc2]">
+                    {period === "yearly"
+                      ? `${plan.price.yearly}`
+                      : `${plan.price.monthly}` }
+                  </small>
                   {period === 'yearly' ? (
-                    <>
-                      <small className="text-[#bcbdc2]">$120/yr</small>
-                      <span className="text-xs">2 months free</span>
-                    </>
-                  ) : (
-                    <small className="text-[#bcbdc2]">$12/mo</small>
-                  )}
+                    <span className="text-xs">2 months free</span>
+                  ) : null}
                 </div>
               </div>
             </label>
@@ -70,7 +93,7 @@ export default function Plan() {
             <input
               className="sr-only peer"
               type="checkbox"
-              name="addon"
+              name="period"
               onChange={(event) => {
                 setPeriod(event.target.checked === true ? 'yearly' : 'monthly');
               }}
@@ -83,7 +106,7 @@ export default function Plan() {
 
         <div className="flex justify-between">
           <button
-            className="text-[#bcbdc2]"
+            className="text-[#bcbdc2] hover:text-[#0d284f]"
             type="button"
             onClick={() =>
               setSearchParams((prev) => {
