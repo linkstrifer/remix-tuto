@@ -1,7 +1,6 @@
-import { Form, useLoaderData } from "@remix-run/react";
-import { loader } from "~/routes/form";
-import Input from "./input";
-
+import { Form, useLoaderData } from '@remix-run/react';
+import { loader } from '~/routes/form';
+import Input from './input';
 
 export default function UserInfo() {
   const loaderData = useLoaderData<typeof loader>();
@@ -20,28 +19,28 @@ export default function UserInfo() {
         <Input
           defaultValue={loaderData?.formData?.name}
           error={loaderData?.errors?.name}
-          placeholder="Name"
           label="Name"
-          type="text"
           name="name"
+          placeholder="Name"
+          type="text"
         />
 
         <Input
           defaultValue={loaderData?.formData?.email}
           error={loaderData?.errors?.email}
-          placeholder="Email"
           label="Email"
-          type="email"
           name="email"
+          placeholder="Email"
+          type="email"
         />
 
         <Input
           defaultValue={loaderData?.formData?.phone}
           error={loaderData?.errors?.phone}
-          placeholder="Phone number"
           label="Phone number"
-          type="text"
           name="phone"
+          placeholder="Phone number"
+          type="text"
         />
 
         <button

@@ -4,7 +4,6 @@ import { Form, useLoaderData, useSearchParams } from '@remix-run/react';
 import { ReactNode } from 'react';
 import Plan from '~/components/plan';
 import UserInfo from '~/components/userInfo';
-import Input from '~/components/input';
 
 function validateUserInfo(formData: FormData | Record<string, string>) {
   const data =
@@ -53,10 +52,22 @@ function Addons() {
   const loaderData = useLoaderData<typeof loader>();
 
   const addons = [
-    { addon: "Online service", description: "Access to multiplayer games", price: {monthly:"+$1/mo", Yearly: "+$10/yr"}},
-    { addon: "Larger storage", description: "Extra 1TB of cloud save", price: {monthly:"+$2/mo", Yearly: "+$20/yr"}},
-    { addon: "Customizable profile", description: "Custom theme on your profile", price: {monthly:"+$2/mo", Yearly: "+$20/yr"}}
-  ]
+    {
+      addon: 'Online service',
+      description: 'Access to multiplayer games',
+      price: { monthly: '+$1/mo', Yearly: '+$10/yr' },
+    },
+    {
+      addon: 'Larger storage',
+      description: 'Extra 1TB of cloud save',
+      price: { monthly: '+$2/mo', Yearly: '+$20/yr' },
+    },
+    {
+      addon: 'Customizable profile',
+      description: 'Custom theme on your profile',
+      price: { monthly: '+$2/mo', Yearly: '+$20/yr' },
+    },
+  ];
 
   return (
     <article className="flex flex-col justify-evenly col-span-2 gap-7 text-[#0d284f]">
@@ -74,30 +85,33 @@ function Addons() {
 
         <ul className="flex flex-col gap-3">
           {addons.map((addon) => (
-            <li key={ addon.addon } className="flex justify-between has-[:checked]:border-[#675fa3] border rounded-md p-2 relative border-fm-gray">
+            <li
+              key={addon.addon}
+              className="flex justify-between has-[:checked]:border-[#675fa3] border rounded-md p-2 relative border-fm-gray"
+            >
               <div className="flex items-center gap-4">
                 <input
                   className="appearance-none border border-fm-gray rounded-sm checked:bg-[#433ef9] checked:before:content-['✔'] text-xs w-5 h-5"
                   type="checkbox"
-                  name={ addon.addon }
+                  name={addon.addon}
                 />
                 <div className="flex flex-col gap-1">
-                  <span><b>{ addon.addon }</b></span>
-                  <small className="text-[#bcbdc2]">{ addon.description }</small>
+                  <span>
+                    <b>{addon.addon}</b>
+                  </span>
+                  <small className="text-[#bcbdc2]">{addon.description}</small>
                 </div>
               </div>
+
               <div>
-                <small className="text-[#8380ff]">{ addon.price.monthly }</small>
-                <small className="text-[#8380ff]">{ addon.price.Yearly }</small>
+                <small className="text-[#8380ff]">{addon.price.monthly}</small>
+                <small className="text-[#8380ff]">{addon.price.Yearly}</small>
               </div>
             </li>
           ))}
         </ul>
         <div className="flex justify-between">
-          <button
-            className="text-[#bcbdc2] hover:text-[#0d284f]"
-            type="button"
-          >
+          <button className="text-[#bcbdc2] hover:text-[#0d284f]" type="button">
             Go back
           </button>
           <button

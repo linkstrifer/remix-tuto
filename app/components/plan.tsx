@@ -7,25 +7,28 @@ const plans = [
     plan: 'arcade',
     price: {
       monthly: '$9/mo',
-      yearly: '$90/yr'
-    }
-  },{
+      yearly: '$90/yr',
+    },
+  },
+  {
     plan: 'advanced',
     price: {
       monthly: '$12/mo',
-      yearly: '$120/yr'
-    }
-  },{
+      yearly: '$120/yr',
+    },
+  },
+  {
     plan: 'pro',
     price: {
       monthly: '$15/mo',
-      yearly: '$150/yr'
-    }
-  }];
+      yearly: '$150/yr',
+    },
+  },
+];
 
 export default function Plan() {
   const loaderData = useLoaderData<typeof loader>();
-  const [period, setPeriod] = useState<'yearly' | 'monthly'>('monthly');
+  const [period, setPeriod] = useState<'yearly' | 'monthly'>('yearly');
 
   const [, setSearchParams] = useSearchParams();
 
@@ -47,34 +50,31 @@ export default function Plan() {
         <input type="hidden" name="phone" value={loaderData?.formData?.phone} />
 
         <div className="grid grid-cols-3 gap-4 justify-around">
-          {plans.map((plan) => (
+          {plans.map((plan, index) => (
             <label
               key={plan.plan}
               className="flex flex-col gap-6 items-start has-[:checked]:border-[#0d284f] border rounded-md p-4 relative border-fm-gray"
             >
-              <img
-                src={`/icon-${plan.plan}.svg`}
-                alt={plan.plan}
-                aria-hidden
-              />
+              <img src={`/icon-${plan.plan}.svg`} alt={plan.plan} aria-hidden />
 
               <div>
                 <span className="capitalize">{plan.plan}</span>
 
                 <input
                   className="opacity-0 absolute pointer-events-none"
+                  defaultChecked={index === 2}
                   defaultValue={loaderData?.formData?.plan}
+                  name="plan"
                   placeholder="Plan"
                   type="radio"
-                  defaultChecked
-                  name="plan"
+                  value={plan.plan}
                 />
 
                 <div className="flex flex-col items-start">
                   <small className="text-[#bcbdc2]">
-                    {period === "yearly"
+                    {period === 'yearly'
                       ? `${plan.price.yearly}`
-                      : `${plan.price.monthly}` }
+                      : `${plan.price.monthly}`}
                   </small>
                   {period === 'yearly' ? (
                     <span className="text-xs">2 months free</span>
@@ -97,7 +97,8 @@ export default function Plan() {
               onChange={(event) => {
                 setPeriod(event.target.checked === true ? 'yearly' : 'monthly');
               }}
-              value={period}
+              defaultChecked={period === 'yearly'}
+              value="yearly"
             />
             <span className="w-2/5 h-4/5 bg-white rounded-full absolute left-0.5 top-0.5 peer-checked:left-6 transition-all duration-400"></span>
           </label>
@@ -118,6 +119,7 @@ export default function Plan() {
           >
             Go back
           </button>
+
           <button
             className="bg-[#174a8b] self-end text-white rounded-md p-2"
             type="submit"
