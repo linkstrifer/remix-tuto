@@ -91,7 +91,7 @@ function Addons() {
             >
               <div className="flex items-center gap-4">
                 <input
-                  className="appearance-none border border-fm-gray rounded-sm checked:bg-[#433ef9] checked:before:content-['✔'] text-xs w-5 h-5"
+                  className="flex justify-center items-center appearance-none border border-fm-gray rounded checked:bg-[#433ef9] checked:before:content-['✓'] text-xs text-white w-5 h-5"
                   type="checkbox"
                   name={addon.addon}
                 />
