@@ -6,7 +6,7 @@ export default function UserInfo() {
   const loaderData = useLoaderData<typeof loader>();
 
   return (
-    <article className="flex flex-col justify-center col-span-2 gap-7 text-[#0d284f]">
+    <article className="flex flex-col col-span-2 gap-7 text-[#0d284f]">
       <h1 className="text-3xl">
         <b>Personal info</b>
       </h1>
