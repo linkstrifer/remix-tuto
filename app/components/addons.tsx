@@ -10,17 +10,17 @@ export default function Addons() {
     {
       addon: 'Online service',
       description: 'Access to multiplayer games',
-      price: { monthly: '+$1/mo', yearly: '+$10/yr' },
+      price: { monthly: 1, yearly: 10 },
     },
     {
       addon: 'Larger storage',
       description: 'Extra 1TB of cloud save',
-      price: { monthly: '+$2/mo', yearly: '+$20/yr' },
+      price: { monthly: 2, yearly: 20 },
     },
     {
       addon: 'Customizable profile',
       description: 'Custom theme on your profile',
-      price: { monthly: '+$2/mo', yearly: '+$20/yr' },
+      price: { monthly: 2, yearly: 20 },
     },
   ];
 
@@ -71,13 +71,11 @@ export default function Addons() {
               </div>
 
               <div>
-                {loaderData?.formData?.period === 'yearly' ? (
-                  <small className="text-[#8380ff]">{addon.price.yearly}</small>
+                { loaderData?.formData?.period === 'yearly' ? (
+                  <small className="text-[#8380ff]">{`+$${addon.price.yearly}/yr`}</small>
                 ) : (
-                  <small className="text-[#8380ff]">
-                    {addon.price.monthly}
-                  </small>
-                )}
+                  <small className="text-[#8380ff]">{`+$${addon.price.monthly}/mo`}</small>
+                ) }
               </div>
             </li>
           ))}

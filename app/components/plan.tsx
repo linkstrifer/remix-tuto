@@ -6,22 +6,22 @@ const plans = [
   {
     plan: 'arcade',
     price: {
-      monthly: '$9/mo',
-      yearly: '$90/yr',
+      monthly: 9,
+      yearly: 90,
     },
   },
   {
     plan: 'advanced',
     price: {
-      monthly: '$12/mo',
-      yearly: '$120/yr',
+      monthly: 12,
+      yearly: 120,
     },
   },
   {
     plan: 'pro',
     price: {
-      monthly: '$15/mo',
-      yearly: '$150/yr',
+      monthly: 15,
+      yearly: 150,
     },
   },
 ];
@@ -77,8 +77,8 @@ export default function Plan() {
                 <div className="flex flex-col items-start">
                   <small className="text-[#bcbdc2]">
                     {period === 'yearly'
-                      ? `${plan.price.yearly}`
-                      : `${plan.price.monthly}`}
+                      ? `$${plan.price.yearly}/yr`
+                      : `$${plan.price.monthly}/mo`}
                   </small>
                   {period === 'yearly' ? (
                     <span className="text-xs">2 months free</span>
