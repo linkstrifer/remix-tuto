@@ -4,6 +4,7 @@ import { Form, useLoaderData, useSearchParams } from '@remix-run/react';
 import { ReactNode } from 'react';
 import Plan from '~/components/plan';
 import UserInfo from '~/components/userInfo';
+import Addons from '~/components/addons';
 
 function validateUserInfo(formData: FormData | Record<string, string>) {
   const data =
@@ -48,70 +49,41 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export type CurrentStep = 'userInfo' | 'plan' | 'addons' | 'summary';
 
-function Addons() {
-  const loaderData = useLoaderData<typeof loader>();
+function Summary() {
 
-  const addons = [
-    {
-      addon: 'Online service',
-      description: 'Access to multiplayer games',
-      price: { monthly: '+$1/mo', Yearly: '+$10/yr' },
-    },
-    {
-      addon: 'Larger storage',
-      description: 'Extra 1TB of cloud save',
-      price: { monthly: '+$2/mo', Yearly: '+$20/yr' },
-    },
-    {
-      addon: 'Customizable profile',
-      description: 'Custom theme on your profile',
-      price: { monthly: '+$2/mo', Yearly: '+$20/yr' },
-    },
-  ];
+  const loaderData = useLoaderData<typeof loader>();
+  const [, setSearchParams] = useSearchParams();
+
+  console.log(loaderData.formData)
 
   return (
-    <article className="flex flex-col justify-evenly col-span-2 gap-7 text-[#0d284f]">
+    <article>
       <h1 className="text-3xl">
-        <b>Pick add-ons</b>
+        <b>Finishing up</b>
       </h1>
       <p className="text-[#bcbdc2]">
-        Add-ons help enhance your gaming experience.
+        Double-check everything looks OK before confirming.
       </p>
-      <Form className="flex flex-col gap-4" method="GET">
+      <Form>
         <input type="hidden" name="name" value={loaderData?.formData?.name} />
         <input type="hidden" name="email" value={loaderData?.formData?.email} />
         <input type="hidden" name="phone" value={loaderData?.formData?.phone} />
         <input type="hidden" name="plan" value={loaderData?.formData?.plan} />
+        <input type="hidden" name="period" value={loaderData?.formData?.period} />
+        <input type="hidden" name="period" value={loaderData?.formData?.addons} />
 
-        <ul className="flex flex-col gap-3">
-          {addons.map((addon) => (
-            <li
-              key={addon.addon}
-              className="flex justify-between has-[:checked]:border-[#675fa3] border rounded-md p-2 relative border-fm-gray"
-            >
-              <div className="flex items-center gap-4">
-                <input
-                  className="flex justify-center items-center appearance-none border border-fm-gray rounded checked:bg-[#433ef9] checked:before:content-['✓'] text-xs text-white w-5 h-5"
-                  type="checkbox"
-                  name={addon.addon}
-                />
-                <div className="flex flex-col gap-1">
-                  <span>
-                    <b>{addon.addon}</b>
-                  </span>
-                  <small className="text-[#bcbdc2]">{addon.description}</small>
-                </div>
-              </div>
-
-              <div>
-                <small className="text-[#8380ff]">{addon.price.monthly}</small>
-                <small className="text-[#8380ff]">{addon.price.Yearly}</small>
-              </div>
-            </li>
-          ))}
-        </ul>
         <div className="flex justify-between">
-          <button className="text-[#bcbdc2] hover:text-[#0d284f]" type="button">
+          <button
+            className="text-[#bcbdc2] hover:text-[#0d284f]"
+            type="button"
+            onClick={() =>
+              setSearchParams((prev) => {
+                prev.set('step', 'addons');
+
+                return prev;
+              })
+            }
+          >
             Go back
           </button>
           <button
@@ -123,7 +95,7 @@ function Addons() {
         </div>
       </Form>
     </article>
-  );
+  )
 }
 
 const formSteps: {
@@ -132,7 +104,7 @@ const formSteps: {
   userInfo: <UserInfo />,
   plan: <Plan />,
   addons: <Addons />,
-  summary: <div />,
+  summary: <Summary />,
 } as const;
 
 export default function MultiForm() {
@@ -144,6 +116,12 @@ export default function MultiForm() {
   let calculatedCurrentStep: CurrentStep = 'userInfo';
 
   if (
+    ['name', 'email', 'phone', 'plan', 'addons'].every((fieldName) =>
+      loaderData.validData.includes(fieldName)
+    )
+  ) {
+    calculatedCurrentStep = 'summary';
+  } else if (
     ['name', 'email', 'phone', 'plan'].every((fieldName) =>
       loaderData.validData.includes(fieldName)
     )
