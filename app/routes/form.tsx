@@ -62,7 +62,7 @@ function Summary() {
   const [, setSearchParams] = useSearchParams();
 
   return (
-    <article>
+    <article className='text-[#0d284f]'>
       <h1 className="text-3xl">
         <b>Finishing up</b>
       </h1>
@@ -85,6 +85,16 @@ function Summary() {
           value={loaderData?.formData?.addons}
         />
 
+        <div>
+          <span>
+            <b className='capitalize'>
+              { loaderData?.formData?.plan }
+              {loaderData?.formData?.period === 'yearly' ? '(yearly)' : ' (monthly)'}
+            </b>
+          </span>
+          <small>{  }</small>
+        </div>
+
         <div className="flex justify-between">
           <button
             className="text-[#bcbdc2] hover:text-[#0d284f]"
@@ -103,7 +113,7 @@ function Summary() {
             className="bg-[#174a8b] self-end text-white rounded-md p-2"
             type="submit"
           >
-            Next Step
+            Confirm
           </button>
         </div>
       </Form>
