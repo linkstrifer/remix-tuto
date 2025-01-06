@@ -30,8 +30,9 @@ export default function Plan() {
   const loaderData = useLoaderData<typeof loader>();
   const [period, setPeriod] = useState<'yearly' | 'monthly'>('yearly');
 
-  const [, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  const defaultPlan = searchParams.get('plan') ?? 'pro';
 
   return (
     <article className="flex flex-col col-span-2 gap-7 text-[#0d284f]">
@@ -51,7 +52,7 @@ export default function Plan() {
         <input type="hidden" name="phone" value={loaderData?.formData?.phone} />
 
         <div className="grid grid-cols-3 gap-4 justify-around">
-          {plans.map((plan, index) => (
+          {plans.map((plan) => (
             <label
               key={plan.plan}
               className="flex flex-col gap-6 items-start has-[:checked]:border-[#0d284f] has-[:checked]:bg-[#f8f9fe] border rounded-md p-4 relative border-fm-gray"
@@ -63,8 +64,7 @@ export default function Plan() {
 
                 <input
                   className="opacity-0 absolute pointer-events-none"
-                  defaultChecked={index === 2}
-                  defaultValue={loaderData?.formData?.plan}
+                  defaultChecked={defaultPlan === plan.plan}
                   name="plan"
                   placeholder="Plan"
                   type="radio"
