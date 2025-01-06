@@ -6,7 +6,10 @@ import Plan from '~/components/plan';
 import UserInfo from '~/components/userInfo';
 import Addons from '~/components/addons';
 
-function validateUserInfo(formData: FormData | Record<string, string>) {
+function validateUserInfo(
+  formData: FormData | Record<string, string | string[]>
+) {
+  console.log({ formData });
   const data =
     typeof formData === 'object'
       ? { ...formData }
@@ -44,17 +47,19 @@ function validateUserInfo(formData: FormData | Record<string, string>) {
 export async function loader({ request }: LoaderFunctionArgs) {
   const search = new URLSearchParams(request.url.split('?')[1]);
 
-  return validateUserInfo(Object.fromEntries(search.entries()));
+  console.log({ search, searchEntries: Object.fromEntries(search.entries()) });
+
+  return validateUserInfo({
+    ...Object.fromEntries(search.entries()),
+    addons: search.getAll('addons'),
+  });
 }
 
 export type CurrentStep = 'userInfo' | 'plan' | 'addons' | 'summary';
 
 function Summary() {
-
   const loaderData = useLoaderData<typeof loader>();
   const [, setSearchParams] = useSearchParams();
-
-  console.log(loaderData.formData)
 
   return (
     <article>
@@ -69,8 +74,16 @@ function Summary() {
         <input type="hidden" name="email" value={loaderData?.formData?.email} />
         <input type="hidden" name="phone" value={loaderData?.formData?.phone} />
         <input type="hidden" name="plan" value={loaderData?.formData?.plan} />
-        <input type="hidden" name="period" value={loaderData?.formData?.period} />
-        <input type="hidden" name="period" value={loaderData?.formData?.addons} />
+        <input
+          type="hidden"
+          name="period"
+          value={loaderData?.formData?.period}
+        />
+        <input
+          type="hidden"
+          name="period"
+          value={loaderData?.formData?.addons}
+        />
 
         <div className="flex justify-between">
           <button
@@ -95,7 +108,7 @@ function Summary() {
         </div>
       </Form>
     </article>
-  )
+  );
 }
 
 const formSteps: {

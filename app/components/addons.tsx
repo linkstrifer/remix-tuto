@@ -1,6 +1,5 @@
-import { Form, useLoaderData, useSearchParams } from "@remix-run/react";
-import { loader } from "~/routes/form";
-
+import { Form, useLoaderData, useSearchParams } from '@remix-run/react';
+import { loader } from '~/routes/form';
 
 export default function Addons() {
   const loaderData = useLoaderData<typeof loader>();
@@ -38,7 +37,13 @@ export default function Addons() {
         <input type="hidden" name="email" value={loaderData?.formData?.email} />
         <input type="hidden" name="phone" value={loaderData?.formData?.phone} />
         <input type="hidden" name="plan" value={loaderData?.formData?.plan} />
-        <input type="hidden" name="period" value={loaderData?.formData?.period === "yearly" ? "yearly" : "monthly"} />
+        <input
+          type="hidden"
+          name="period"
+          value={
+            loaderData?.formData?.period === 'yearly' ? 'yearly' : 'monthly'
+          }
+        />
 
         <ul className="flex flex-col gap-3">
           {addons.map((addon) => (
@@ -49,7 +54,9 @@ export default function Addons() {
               <div className="flex items-center gap-4">
                 <input
                   className="flex justify-center items-center appearance-none border border-fm-gray rounded checked:bg-[#433ef9] checked:before:content-['✓'] text-xs text-white w-5 h-5"
-                  defaultValue={loaderData?.formData?.addons}
+                  defaultChecked={loaderData?.formData?.addons?.includes(
+                    addon.addon
+                  )}
                   type="checkbox"
                   name="addons"
                   value={addon.addon}
@@ -63,11 +70,13 @@ export default function Addons() {
               </div>
 
               <div>
-                { loaderData?.formData?.period === 'yearly' ? (
+                {loaderData?.formData?.yearly ? (
                   <small className="text-[#8380ff]">{addon.price.yearly}</small>
                 ) : (
-                  <small className="text-[#8380ff]">{addon.price.monthly}</small>
-                ) }
+                  <small className="text-[#8380ff]">
+                    {addon.price.monthly}
+                  </small>
+                )}
               </div>
             </li>
           ))}
