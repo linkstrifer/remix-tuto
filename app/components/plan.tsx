@@ -32,6 +32,7 @@ export default function Plan() {
 
   const [, setSearchParams] = useSearchParams();
 
+
   return (
     <article className="flex flex-col col-span-2 gap-7 text-[#0d284f]">
       <h1 className="text-3xl">
@@ -53,7 +54,7 @@ export default function Plan() {
           {plans.map((plan, index) => (
             <label
               key={plan.plan}
-              className="flex flex-col gap-6 items-start has-[:checked]:border-[#0d284f] border rounded-md p-4 relative border-fm-gray"
+              className="flex flex-col gap-6 items-start has-[:checked]:border-[#0d284f] has-[:checked]:bg-[#f8f9fe] border rounded-md p-4 relative border-fm-gray"
             >
               <img src={`/icon-${plan.plan}.svg`} alt={plan.plan} aria-hidden />
 
@@ -94,10 +95,10 @@ export default function Plan() {
               className="sr-only peer"
               type="checkbox"
               name="period"
+              defaultChecked={period === 'yearly'}
               onChange={(event) => {
                 setPeriod(event.target.checked === true ? 'yearly' : 'monthly');
               }}
-              defaultChecked={period === 'yearly'}
               value="yearly"
             />
             <span className="w-2/5 h-4/5 bg-white rounded-full absolute left-0.5 top-0.5 peer-checked:left-6 transition-all duration-400"></span>
