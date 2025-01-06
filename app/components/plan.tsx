@@ -28,9 +28,12 @@ const plans = [
 
 export default function Plan() {
   const loaderData = useLoaderData<typeof loader>();
-  const [period, setPeriod] = useState<'yearly' | 'monthly'>('yearly');
 
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const [period, setPeriod] = useState<'yearly' | 'monthly'>(
+    searchParams.get('yearly') ? 'yearly' : 'monthly'
+  );
 
   const defaultPlan = searchParams.get('plan') ?? 'pro';
 
@@ -94,12 +97,11 @@ export default function Plan() {
             <input
               className="sr-only peer"
               type="checkbox"
-              name="period"
+              name="yearly"
               defaultChecked={period === 'yearly'}
               onChange={(event) => {
                 setPeriod(event.target.checked === true ? 'yearly' : 'monthly');
               }}
-              value="yearly"
             />
             <span className="w-2/5 h-4/5 bg-white rounded-full absolute left-0.5 top-0.5 peer-checked:left-6 transition-all duration-400"></span>
           </label>
