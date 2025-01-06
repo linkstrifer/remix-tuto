@@ -37,6 +37,7 @@ export default function Addons() {
         <input type="hidden" name="email" value={loaderData?.formData?.email} />
         <input type="hidden" name="phone" value={loaderData?.formData?.phone} />
         <input type="hidden" name="plan" value={loaderData?.formData?.plan} />
+
         <input
           type="hidden"
           name="period"
@@ -70,7 +71,7 @@ export default function Addons() {
               </div>
 
               <div>
-                {loaderData?.formData?.yearly ? (
+                {loaderData?.formData?.period === 'yearly' ? (
                   <small className="text-[#8380ff]">{addon.price.yearly}</small>
                 ) : (
                   <small className="text-[#8380ff]">
