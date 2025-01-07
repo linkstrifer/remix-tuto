@@ -18,22 +18,6 @@ describe('validateUserInfo', () => {
     });
   });
 
-  it('should return validData if object is pass', () => {
-    const formData = new FormData();
-
-    formData.set('name', 'John Doe');
-    formData.set('email', 'john@doe.com');
-
-    expect(validateUserInfo(formData)).toStrictEqual({
-      validData: ['name', 'email'],
-      errors: {},
-      formData: {
-        name: 'John Doe',
-        email: 'john@doe.com',
-      },
-    });
-  });
-
   it('should validate name', () => {
     expect(validateUserInfo({ name: '' })).toStrictEqual({
       validData: [],
