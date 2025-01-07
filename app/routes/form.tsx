@@ -2,9 +2,9 @@ import Steps from '~/components/steps';
 import { LoaderFunctionArgs } from '@remix-run/node';
 import { Form, useLoaderData, useSearchParams } from '@remix-run/react';
 import { ReactNode } from 'react';
-import Plan from '~/components/plan';
+import Plan, { plans } from '~/components/plan';
 import UserInfo from '~/components/userInfo';
-import Addons from '~/components/addons';
+import Addons, { addons } from '~/components/addons';
 
 function validateUserInfo(
   formData: FormData | Record<string, string | string[]>
@@ -55,21 +55,27 @@ export async function loader({ request }: LoaderFunctionArgs) {
   });
 }
 
-export type CurrentStep = 'userInfo' | 'plan' | 'addons' | 'summary';
+export type CurrentStep = 'userInfo' | 'plan' | 'addons' | 'summary' | 'thanks';
 
 function Summary() {
   const loaderData = useLoaderData<typeof loader>();
   const [, setSearchParams] = useSearchParams();
 
+  const planSelected = plans.find((plan) => plan.plan === loaderData.formData.plan)
+
+  const addonsSelected = addons.filter((addon) => addon.addon )
+
+  console.log(addonsSelected)
+
   return (
-    <article className='text-[#0d284f]'>
+    <article className="flex flex-col col-span-2 gap-7 text-[#0d284f]">
       <h1 className="text-3xl">
         <b>Finishing up</b>
       </h1>
       <p className="text-[#bcbdc2]">
         Double-check everything looks OK before confirming.
       </p>
-      <Form>
+      <Form className="flex flex-col gap-4">
         <input type="hidden" name="name" value={loaderData?.formData?.name} />
         <input type="hidden" name="email" value={loaderData?.formData?.email} />
         <input type="hidden" name="phone" value={loaderData?.formData?.phone} />
@@ -79,20 +85,26 @@ function Summary() {
           name="period"
           value={loaderData?.formData?.period}
         />
-        <input
-          type="hidden"
-          name="period"
-          value={loaderData?.formData?.addons}
-        />
+        { loaderData?.formData?.addons.map( (addon: string) => (
+          <input key={addon} type="hidden" name="addons" value={addon} />
+        ) ) }
 
         <div>
-          <span>
-            <b className='capitalize'>
-              { loaderData?.formData?.plan }
-              {loaderData?.formData?.period === 'yearly' ? '(yearly)' : ' (monthly)'}
-            </b>
-          </span>
-          <small>{  }</small>
+          <div className="flex justify-between">
+
+            <span>
+              <b className='capitalize'>
+                { loaderData?.formData?.plan }
+                {loaderData?.formData?.period === 'yearly' ? '(yearly)' : ' (monthly)'}
+              </b>
+            </span>
+            <small>{ loaderData.formData.period === 'yearly' ? `$${planSelected?.price.yearly}/yr` : `$${planSelected?.price.monthly}/mo` }</small>
+
+          </div>
+          <div>
+
+          </div>
+
         </div>
 
         <div className="flex justify-between">
@@ -128,6 +140,7 @@ const formSteps: {
   plan: <Plan />,
   addons: <Addons />,
   summary: <Summary />,
+  thanks: <div>Thanks work!</div>
 } as const;
 
 export default function MultiForm() {

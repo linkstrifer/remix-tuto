@@ -2,7 +2,7 @@ import { Form, useLoaderData, useSearchParams } from '@remix-run/react';
 import { useState } from 'react';
 import { loader } from '~/routes/form';
 
-const plans = [
+export const plans = [
   {
     plan: 'arcade',
     price: {

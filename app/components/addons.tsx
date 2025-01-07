@@ -1,28 +1,30 @@
 import { Form, useLoaderData, useSearchParams } from '@remix-run/react';
 import { loader } from '~/routes/form';
 
+export const addons = [
+  {
+    addon: 'Online service',
+    description: 'Access to multiplayer games',
+    price: { monthly: 1, yearly: 10 },
+  },
+  {
+    addon: 'Larger storage',
+    description: 'Extra 1TB of cloud save',
+    price: { monthly: 2, yearly: 20 },
+  },
+  {
+    addon: 'Customizable profile',
+    description: 'Custom theme on your profile',
+    price: { monthly: 2, yearly: 20 },
+  },
+];
+
+
 export default function Addons() {
   const loaderData = useLoaderData<typeof loader>();
 
   const [, setSearchParams] = useSearchParams();
 
-  const addons = [
-    {
-      addon: 'Online service',
-      description: 'Access to multiplayer games',
-      price: { monthly: 1, yearly: 10 },
-    },
-    {
-      addon: 'Larger storage',
-      description: 'Extra 1TB of cloud save',
-      price: { monthly: 2, yearly: 20 },
-    },
-    {
-      addon: 'Customizable profile',
-      description: 'Custom theme on your profile',
-      price: { monthly: 2, yearly: 20 },
-    },
-  ];
 
   return (
     <article className="flex flex-col col-span-2 gap-7 text-[#0d284f]">
