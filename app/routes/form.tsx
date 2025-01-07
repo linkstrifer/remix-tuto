@@ -5,6 +5,10 @@ import { ReactNode } from 'react';
 import Plan, { plans } from '~/components/plan';
 import UserInfo from '~/components/userInfo';
 import Addons, { addons } from '~/components/addons';
+import {
+  calculateCurrentStep,
+  CurrentStep,
+} from '~/utils/calculateCurrentStep/calculateCurrentStep';
 
 function validateUserInfo(
   formData: FormData | Record<string, string | string[]>
@@ -55,15 +59,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
   });
 }
 
-export type CurrentStep = 'userInfo' | 'plan' | 'addons' | 'summary' | 'thanks';
-
 function Summary() {
   const loaderData = useLoaderData<typeof loader>();
   const [, setSearchParams] = useSearchParams();
 
-  const planSelected = plans.find((plan) => plan.plan === loaderData.formData.plan)
+  const planSelected = plans.find(
+    (plan) => plan.plan === loaderData.formData.plan
+  );
 
-  const addonsSelected = addons.filter((addon) => loaderData.formData.addons.includes(addon.addon) )
+  const addonsSelected = addons.filter((addon) =>
+    loaderData.formData.addons.includes(addon.addon)
+  );
 
   return (
     <article className="flex flex-col col-span-2 gap-7 text-[#0d284f]">
@@ -83,18 +89,19 @@ function Summary() {
           name="period"
           value={loaderData?.formData?.period}
         />
-        { loaderData?.formData?.addons.map( (addon: string) => (
+        {loaderData?.formData?.addons.map((addon: string) => (
           <input key={addon} type="hidden" name="addons" value={addon} />
-        ) ) }
+        ))}
 
         <div>
           <div className="flex flex-col gap-4 bg-[#f8f9fe]">
-
-            <div  className="flex justify-between p-4">
+            <div className="flex justify-between p-4">
               <span>
                 <b className="flex flex-col capitalize">
-                  { loaderData?.formData?.plan }
-                  {loaderData?.formData?.period === 'yearly' ? '(yearly)' : ' (monthly)'}
+                  {loaderData?.formData?.plan}
+                  {loaderData?.formData?.period === 'yearly'
+                    ? '(yearly)'
+                    : ' (monthly)'}
                 </b>
                 <button
                   className="text-sm"
@@ -108,50 +115,41 @@ function Summary() {
                 >
                   Change
                 </button>
-
               </span>
               <small>
                 <b>
-                  {
-                    loaderData.formData.period === 'yearly' ?
-                      `$${planSelected?.price.yearly}/yr`
-                        :
-                      `$${planSelected?.price.monthly}/mo`
-                  }
+                  {loaderData.formData.period === 'yearly'
+                    ? `$${planSelected?.price.yearly}/yr`
+                    : `$${planSelected?.price.monthly}/mo`}
                 </b>
               </small>
             </div>
           </div>
           <div>
-            { addonsSelected.map((addon) => (
-              <div key={addon.addon} className="flex justify-between bg-[#f8f9fe] p-4">
-                <span className="text-[#bcbdc2] text-sm">
-                    { addon.addon }
-                </span>
+            {addonsSelected.map((addon) => (
+              <div
+                key={addon.addon}
+                className="flex justify-between bg-[#f8f9fe] p-4"
+              >
+                <span className="text-[#bcbdc2] text-sm">{addon.addon}</span>
                 <small>
-                  {
-                    loaderData.formData.period === 'yearly' ?
-                      `$${addon?.price.yearly}/yr`
-                        :
-                      `$${addon?.price.monthly}/mo`
-                  }
+                  {loaderData.formData.period === 'yearly'
+                    ? `$${addon?.price.yearly}/yr`
+                    : `$${addon?.price.monthly}/mo`}
                 </small>
               </div>
-            )) }
+            ))}
             <div className="flex justify-between p-4">
               <span className="text-[#bcbdc2] text-sm">
-                {
-                  `Total (per ${ loaderData.formData.period === "yearly" ? "year" : "month" })`
-                }
+                {`Total (per ${
+                  loaderData.formData.period === 'yearly' ? 'year' : 'month'
+                })`}
               </span>
               <small>
-                <b>
-                  total
-                </b>
+                <b>total</b>
               </small>
             </div>
           </div>
-
         </div>
 
         <div className="flex justify-between">
@@ -187,7 +185,7 @@ const formSteps: {
   plan: <Plan />,
   addons: <Addons />,
   summary: <Summary />,
-  thanks: <div>Thanks work!</div>
+  thanks: <div>Thanks work!</div>,
 } as const;
 
 export default function MultiForm() {
@@ -196,29 +194,10 @@ export default function MultiForm() {
 
   const currentStepFromURL = searchParams.get('step') as CurrentStep | null;
 
-  let calculatedCurrentStep: CurrentStep = 'userInfo';
-
-  if (
-    ['name', 'email', 'phone', 'plan', 'addons'].every((fieldName) =>
-      loaderData.validData.includes(fieldName)
-    )
-  ) {
-    calculatedCurrentStep = 'summary';
-  } else if (
-    ['name', 'email', 'phone', 'plan'].every((fieldName) =>
-      loaderData.validData.includes(fieldName)
-    )
-  ) {
-    calculatedCurrentStep = 'addons';
-  } else if (
-    ['name', 'email', 'phone'].every((fieldName) =>
-      loaderData.validData.includes(fieldName)
-    )
-  ) {
-    calculatedCurrentStep = 'plan';
-  }
-
-  const currentStep = currentStepFromURL ?? calculatedCurrentStep;
+  const currentStep = calculateCurrentStep(
+    loaderData.validData,
+    currentStepFromURL
+  );
 
   return (
     <main className="bg-[#eef5ff] grid min-h-screen">
