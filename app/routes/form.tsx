@@ -52,9 +52,6 @@ function Summary() {
           name="period"
           value={loaderData?.formData?.period}
         />
-        {loaderData?.formData?.addons.map((addon: string) => (
-          <input key={addon} type="hidden" name="addons" value={addon} />
-        ))}
 
         <div>
           <div className="flex flex-col gap-4 bg-[#f8f9fe]">
@@ -94,6 +91,13 @@ function Summary() {
                 key={addon.addon}
                 className="flex justify-between bg-[#f8f9fe] p-4"
               >
+                <input
+                  key="addon"
+                  type="hidden"
+                  name="addons"
+                  value={addon.addon}
+                />
+
                 <span className="text-[#bcbdc2] text-sm">{addon.addon}</span>
                 <small>
                   {loaderData.formData.period === 'yearly'
