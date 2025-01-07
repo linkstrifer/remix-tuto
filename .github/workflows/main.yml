@@ -45,3 +45,21 @@ jobs:
 
       - name: runs lint
         run: npm run lint
+  run-tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: install nodejs
+        uses: actions/setup-node@v4.1.0
+        with:
+          node-version: 21
+
+      - name: checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: install dependencies
+        run: npm i
+
+      - name: runs tests
+        run: npm run test
