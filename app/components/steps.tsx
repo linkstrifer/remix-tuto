@@ -1,6 +1,6 @@
 import { Link, useSearchParams } from '@remix-run/react';
 import classNames from 'classnames';
-import { CurrentStep } from '~/routes/form';
+import { CurrentStep } from '~/utils/calculateCurrentStep/calculateCurrentStep';
 
 const steps = [
   {
