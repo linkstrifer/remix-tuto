@@ -54,6 +54,8 @@ export default function Plan() {
 
         <input type="hidden" name="phone" value={loaderData?.formData?.phone} />
 
+        <input type="hidden" name="step" value="addons" />
+
         <div className="grid grid-cols-3 gap-4 justify-around">
           {plans.map((plan) => (
             <label
