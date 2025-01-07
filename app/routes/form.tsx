@@ -96,7 +96,18 @@ function Summary() {
                   { loaderData?.formData?.plan }
                   {loaderData?.formData?.period === 'yearly' ? '(yearly)' : ' (monthly)'}
                 </b>
-                <button className="text-sm" type="button">Change</button>
+                <button
+                  className="text-sm"
+                  type="button"
+                  onClick={() =>
+                    setSearchParams((prev) => {
+                      prev.set('step', 'plan');
+                      return prev;
+                    })
+                  }
+                >
+                  Change
+                </button>
 
               </span>
               <small>
