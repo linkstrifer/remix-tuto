@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const url = 'http://localhost:5173/form';
+const url = 'http://localhost:3000/form';
 
 test('form loads user info by default', async ({ page }) => {
   await page.goto(url);
