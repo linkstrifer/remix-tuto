@@ -63,9 +63,7 @@ function Summary() {
 
   const planSelected = plans.find((plan) => plan.plan === loaderData.formData.plan)
 
-  const addonsSelected = addons.filter((addon) => addon.addon )
-
-  console.log(addonsSelected)
+  const addonsSelected = addons.filter((addon) => loaderData.formData.addons.includes(addon.addon) )
 
   return (
     <article className="flex flex-col col-span-2 gap-7 text-[#0d284f]">
@@ -90,19 +88,57 @@ function Summary() {
         ) ) }
 
         <div>
-          <div className="flex justify-between">
+          <div className="flex flex-col gap-4 bg-[#f8f9fe]">
 
-            <span>
-              <b className='capitalize'>
-                { loaderData?.formData?.plan }
-                {loaderData?.formData?.period === 'yearly' ? '(yearly)' : ' (monthly)'}
-              </b>
-            </span>
-            <small>{ loaderData.formData.period === 'yearly' ? `$${planSelected?.price.yearly}/yr` : `$${planSelected?.price.monthly}/mo` }</small>
+            <div  className="flex justify-between p-4">
+              <span>
+                <b className="flex flex-col capitalize">
+                  { loaderData?.formData?.plan }
+                  {loaderData?.formData?.period === 'yearly' ? '(yearly)' : ' (monthly)'}
+                </b>
+                <button className="text-sm" type="button">Change</button>
 
+              </span>
+              <small>
+                <b>
+                  {
+                    loaderData.formData.period === 'yearly' ?
+                      `$${planSelected?.price.yearly}/yr`
+                        :
+                      `$${planSelected?.price.monthly}/mo`
+                  }
+                </b>
+              </small>
+            </div>
           </div>
           <div>
-
+            { addonsSelected.map((addon) => (
+              <div key={addon.addon} className="flex justify-between bg-[#f8f9fe] p-4">
+                <span className="text-[#bcbdc2] text-sm">
+                    { addon.addon }
+                </span>
+                <small>
+                  {
+                    loaderData.formData.period === 'yearly' ?
+                      `$${addon?.price.yearly}/yr`
+                        :
+                      `$${addon?.price.monthly}/mo`
+                  }
+                </small>
+              </div>
+            )) }
+            <div className="flex justify-between p-4">
+              <span className="text-[#bcbdc2] text-sm">
+                {
+                  `Total (per ${ loaderData.formData.period === "yearly" ? "year" : "month" })`
+                }
+              </span>
+              <small>
+                <b>
+                  total
+                </b>
+              </small>
+            </div>
           </div>
 
         </div>
