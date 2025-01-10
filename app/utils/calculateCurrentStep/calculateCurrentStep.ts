@@ -11,6 +11,12 @@ export function calculateCurrentStep(
   }
 
   if (
+    ['name', 'email', 'phone', 'plan', 'addons', 'summary'].every((fieldName) =>
+      validData.includes(fieldName)
+    )
+  ) {
+    calculatedCurrentStep = 'thanks';
+  } else if (
     ['name', 'email', 'phone', 'plan', 'addons'].every((fieldName) =>
       validData.includes(fieldName)
     )
